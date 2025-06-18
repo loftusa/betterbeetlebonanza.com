@@ -525,6 +525,26 @@
             color: black;
         }
         
+        .mode-countdown.masonic {
+            background: linear-gradient(45deg, #000000, #FFD700);
+            color: #FFD700;
+        }
+        
+        .mode-countdown.lightning {
+            background: linear-gradient(45deg, #FFFF00, #FF6600);
+            color: black;
+        }
+        
+        .mode-countdown.fibonacci {
+            background: linear-gradient(45deg, #FFD700, #FF8C00);
+            color: black;
+        }
+        
+        .mode-countdown.illuminati {
+            background: linear-gradient(45deg, #000000, #00FF00);
+            color: #00FF00;
+        }
+        
         @keyframes countdown-pulse {
             0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
             50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,0,100,0.5); }
@@ -954,7 +974,8 @@
         <span style="opacity: 0.6;">• Konami code (↑↑↓↓←→←→BA)</span><br>
         <span style="opacity: 0.6;">• Watch clock at 11:11, 23:23, 33:33</span><br>
         <span style="opacity: 0.5; font-size: 0.6rem;">SEEK THE TRIANGLE AND THE EYE</span><br>
-        <span style="opacity: 0.4; font-size: 0.55rem; color: #ffff00;">Sacred words: god, jesus, temple, spiral</span>
+        <span style="opacity: 0.4; font-size: 0.55rem; color: #ffff00;">Sacred words: god, jesus, temple, spiral, earthquake</span><br>
+        <span style="opacity: 0.4; font-size: 0.55rem; color: #00ffff;">Sacred numbers: 23, 33, 77, 144, 777, 1111</span>
     </div>
 
     <div class="floating-beetles" id="floatingBeetles"></div>
@@ -1819,10 +1840,19 @@
             showMessage('🌍 EARTHQUAKE MODE! 🌍');
             document.body.style.animation = 'earthquake 0.1s infinite';
             
-            setTimeout(() => {
-                document.body.style.animation = 'flashingColors 1.5s infinite';
-                secretModes.earthquake = false;
-            }, 8000);
+            // Only start countdown if not already started by sacred word
+            if (!currentMode || currentMode !== 'earthquake') {
+                startModeCountdown('earthquake', 8, '🌍', () => {
+                    document.body.style.animation = 'flashingColors 1.5s infinite';
+                    secretModes.earthquake = false;
+                });
+            } else {
+                // If countdown already started, just set the callback
+                setTimeout(() => {
+                    document.body.style.animation = 'flashingColors 1.5s infinite';
+                    secretModes.earthquake = false;
+                }, 8000);
+            }
         }
         
         function activateBeetle2000Mode() {
@@ -2236,7 +2266,8 @@
         let typingTimeout = null;
         let deleteTimeout = null;
         let isDeleting = false;
-        const sacredWords = ['god', 'jesus', 'temple', 'spiral'];
+        const sacredWords = ['god', 'jesus', 'temple', 'spiral', 'earthquake'];
+        const sacredNumbers = ['23', '33', '77', '144', '777', '1111'];
         
         function updateTypewriterDisplay() {
             const display = document.getElementById('typewriterDisplay');
@@ -2271,8 +2302,8 @@
         }
         
         document.addEventListener('keydown', (e) => {
-            // Only track letter keys for sacred words
-            if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
+            // Track letter and number keys for sacred words/numbers
+            if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
                 // Stop any ongoing deletion
                 if (isDeleting) {
                     isDeleting = false;
@@ -2297,6 +2328,19 @@
                     if (typedText.includes(word)) {
                         activateSacredWord(word);
                         // Clear text immediately when word is found
+                        typedText = '';
+                        updateTypewriterDisplay();
+                        // Cancel pending deletions
+                        if (typingTimeout) clearTimeout(typingTimeout);
+                        if (deleteTimeout) clearTimeout(deleteTimeout);
+                    }
+                });
+                
+                // Check if any sacred number was typed
+                sacredNumbers.forEach(number => {
+                    if (typedText.includes(number)) {
+                        activateSacredNumber(number);
+                        // Clear text immediately when number is found
                         typedText = '';
                         updateTypewriterDisplay();
                         // Cancel pending deletions
@@ -2347,10 +2391,26 @@
                         showMessage('🌀 Spiral energy fades...');
                     });
                     break;
+                case 'earthquake':
+                    showMessage('🌍 THE EARTH TREMBLES! 🌍');
+                    activateEarthquakeMode();
+                    startModeCountdown('earthquake', 8, '🌍', () => {
+                        showMessage('🌍 The earth settles...');
+                    });
+                    break;
             }
         }
         
         function createGoldenSpiralEffect() {
+            // Change background to golden
+            const originalBodyStyle = document.body.style.background;
+            document.body.style.background = 'radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF8C00 100%)';
+            document.body.style.backgroundAttachment = 'fixed';
+            
+            // Play spiral sound effect
+            playGoldenSpiralSound();
+            
+            // Create positioned golden ratio spirals
             const phi = 1.618033988749;
             for (let i = 0; i < 12; i++) {
                 const spiral = document.createElement('div');
@@ -2366,6 +2426,7 @@
                     pointer-events: none;
                     z-index: 999;
                     transform-origin: center;
+                    text-shadow: 0 0 20px #FFD700;
                 `;
                 document.body.appendChild(spiral);
                 
@@ -2375,6 +2436,39 @@
                     }
                 }, 8000);
             }
+            
+            // Create giant flying spirals across the screen
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const giantSpiral = document.createElement('div');
+                    giantSpiral.textContent = '🌀';
+                    giantSpiral.style.cssText = `
+                        position: fixed;
+                        left: -100px;
+                        top: ${Math.random() * 80 + 10}%;
+                        font-size: 6rem;
+                        color: gold;
+                        opacity: 0.9;
+                        animation: spiral-fly-across 4s linear forwards;
+                        pointer-events: none;
+                        z-index: 998;
+                        text-shadow: 0 0 30px #FFD700;
+                    `;
+                    document.body.appendChild(giantSpiral);
+                    
+                    setTimeout(() => {
+                        if (giantSpiral && giantSpiral.parentNode) {
+                            giantSpiral.parentNode.removeChild(giantSpiral);
+                        }
+                    }, 4000);
+                }, i * 1000);
+            }
+            
+            // Restore background after 8 seconds
+            setTimeout(() => {
+                document.body.style.background = originalBodyStyle || '';
+                document.body.style.backgroundAttachment = '';
+            }, 8000);
             
             // Add spiral CSS animations
             if (!document.getElementById('spiral-animations')) {
@@ -2390,8 +2484,81 @@
                         50% { opacity: 1; }
                         100% { opacity: 0; }
                     }
+                    @keyframes spiral-fly-across {
+                        0% { 
+                            left: -100px; 
+                            transform: rotate(0deg) scale(1); 
+                            opacity: 0;
+                        }
+                        10% { 
+                            opacity: 0.9;
+                        }
+                        90% { 
+                            opacity: 0.9;
+                        }
+                        100% { 
+                            left: calc(100vw + 100px); 
+                            transform: rotate(1440deg) scale(1.5); 
+                            opacity: 0;
+                        }
+                    }
                 `;
                 document.head.appendChild(spiralStyle);
+            }
+        }
+        
+        function playGoldenSpiralSound() {
+            // Create mystical spiral sound using Web Audio API
+            const spiralDuration = 3;
+            const startTime = audioContext.currentTime;
+            
+            // Create ascending frequency spiral
+            const frequencies = [220, 277, 330, 415, 523, 659, 831]; // Ascending harmonic series
+            
+            frequencies.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filterNode = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(masterGain);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime + index * 0.3);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 2, startTime + spiralDuration);
+                oscillator.type = 'sine';
+                
+                filterNode.type = 'lowpass';
+                filterNode.frequency.setValueAtTime(1000 + freq, startTime);
+                filterNode.frequency.exponentialRampToValueAtTime(3000, startTime + spiralDuration);
+                
+                gainNode.gain.setValueAtTime(0, startTime + index * 0.3);
+                gainNode.gain.linearRampToValueAtTime(0.08, startTime + index * 0.3 + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.02, startTime + spiralDuration - 0.5);
+                gainNode.gain.linearRampToValueAtTime(0, startTime + spiralDuration);
+                
+                oscillator.start(startTime + index * 0.3);
+                oscillator.stop(startTime + spiralDuration);
+            });
+            
+            // Add ethereal reverb effect
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const echoOsc = audioContext.createOscillator();
+                    const echoGain = audioContext.createGain();
+                    
+                    echoOsc.connect(echoGain);
+                    echoGain.connect(masterGain);
+                    
+                    echoOsc.frequency.setValueAtTime(330 + i * 110, audioContext.currentTime);
+                    echoOsc.type = 'triangle';
+                    
+                    echoGain.gain.setValueAtTime(0.03, audioContext.currentTime);
+                    echoGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
+                    
+                    echoOsc.start(audioContext.currentTime);
+                    echoOsc.stop(audioContext.currentTime + 2);
+                }, i * 500);
             }
         }
         
@@ -2439,6 +2606,179 @@
                     }
                 `;
                 document.head.appendChild(templeStyle);
+            }
+        }
+        
+        function activateSacredNumber(number) {
+            switch(number) {
+                case '23':
+                    showMessage('🔢 TWENTY-THREE: The sacred prime of chaos!');
+                    // Create 23 floating beetles
+                    for (let i = 0; i < 23; i++) {
+                        setTimeout(() => spawnFlyingBeetle(), i * 100);
+                    }
+                    showMessage('🪳 The 23 sacred beetles emerge!');
+                    break;
+                case '33':
+                    showMessage('📐 THIRTY-THREE: Masonic degrees revealed!');
+                    // Create triangle formation with special effects
+                    createMasonicTriangle();
+                    startModeCountdown('masonic', 8, '📐', () => {
+                        showMessage('📐 The lodge closes...');
+                    });
+                    break;
+                case '77':
+                    showMessage('⚡ SEVENTY-SEVEN: Lightning strikes twice!');
+                    // Double all beetle production for 7 seconds
+                    const oldProduction = gameState.beetlesPerSecond;
+                    gameState.beetlesPerSecond *= 2;
+                    startModeCountdown('lightning', 7, '⚡', () => {
+                        calculateProduction(); // Reset to normal
+                    });
+                    break;
+                case '144':
+                    showMessage('🌀 ONE-FOUR-FOUR: Fibonacci awakens!');
+                    // Create fibonacci spiral pattern
+                    createFibonacciPattern();
+                    startModeCountdown('fibonacci', 12, '🌀', () => {
+                        showMessage('🌀 The golden ratio fades...');
+                    });
+                    break;
+                case '777':
+                    showMessage('🎰 SEVEN-SEVEN-SEVEN: Jackpot of the divine!');
+                    // Massive beetle bonus
+                    gameState.beetles += 777;
+                    updateDisplay();
+                    createJackpotEffect();
+                    break;
+                case '1111':
+                    showMessage('👁 ELEVEN-ELEVEN: The awakening hour!');
+                    // Special illuminati effect
+                    activateIlluminatiMode();
+                    startModeCountdown('illuminati', 11, '👁', () => {
+                        showMessage('👁 The all-seeing eye retreats...');
+                    });
+                    break;
+            }
+        }
+        
+        function createMasonicTriangle() {
+            const symbols = ['📐', '🔺', '👁'];
+            for (let i = 0; i < 3; i++) {
+                const symbol = document.createElement('div');
+                symbol.textContent = symbols[i];
+                symbol.style.cssText = `
+                    position: fixed;
+                    font-size: 4rem;
+                    color: gold;
+                    opacity: 0.9;
+                    animation: masonic-float 8s ease-in-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                    left: ${30 + i * 20}%;
+                    top: ${20 + i * 15}%;
+                `;
+                document.body.appendChild(symbol);
+                
+                setTimeout(() => {
+                    if (symbol && symbol.parentNode) {
+                        symbol.parentNode.removeChild(symbol);
+                    }
+                }, 8000);
+            }
+            
+            // Add masonic animation
+            if (!document.getElementById('masonic-animations')) {
+                const masonicStyle = document.createElement('style');
+                masonicStyle.id = 'masonic-animations';
+                masonicStyle.textContent = `
+                    @keyframes masonic-float {
+                        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                        25% { transform: scale(1.5) rotate(90deg); opacity: 1; }
+                        75% { transform: scale(1) rotate(270deg); opacity: 1; }
+                        100% { transform: scale(0) rotate(360deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(masonicStyle);
+            }
+        }
+        
+        function createFibonacciPattern() {
+            const fibSequence = [1, 1, 2, 3, 5, 8, 13, 21];
+            fibSequence.forEach((num, index) => {
+                const fibElement = document.createElement('div');
+                fibElement.textContent = num;
+                fibElement.style.cssText = `
+                    position: fixed;
+                    left: ${10 + index * 10}%;
+                    top: ${20 + (num * 3)}%;
+                    font-size: ${1 + num * 0.2}rem;
+                    color: #FFD700;
+                    opacity: 0.8;
+                    animation: fibonacci-spiral ${2 + index * 0.5}s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                `;
+                document.body.appendChild(fibElement);
+                
+                setTimeout(() => {
+                    if (fibElement && fibElement.parentNode) {
+                        fibElement.parentNode.removeChild(fibElement);
+                    }
+                }, 12000);
+            });
+            
+            // Add fibonacci animation
+            if (!document.getElementById('fibonacci-animations')) {
+                const fibStyle = document.createElement('style');
+                fibStyle.id = 'fibonacci-animations';
+                fibStyle.textContent = `
+                    @keyframes fibonacci-spiral {
+                        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                        50% { transform: scale(2) rotate(180deg); opacity: 1; }
+                        100% { transform: scale(1) rotate(360deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(fibStyle);
+            }
+        }
+        
+        function createJackpotEffect() {
+            // Create raining 7s
+            for (let i = 0; i < 50; i++) {
+                const seven = document.createElement('div');
+                seven.textContent = '7';
+                seven.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}%;
+                    top: -10%;
+                    font-size: 2rem;
+                    color: gold;
+                    opacity: 0.9;
+                    animation: jackpot-rain ${2 + Math.random() * 3}s linear forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                `;
+                document.body.appendChild(seven);
+                
+                setTimeout(() => {
+                    if (seven && seven.parentNode) {
+                        seven.parentNode.removeChild(seven);
+                    }
+                }, 5000);
+            }
+            
+            // Add jackpot animation
+            if (!document.getElementById('jackpot-animations')) {
+                const jackpotStyle = document.createElement('style');
+                jackpotStyle.id = 'jackpot-animations';
+                jackpotStyle.textContent = `
+                    @keyframes jackpot-rain {
+                        0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(jackpotStyle);
             }
         }
         
