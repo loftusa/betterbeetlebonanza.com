@@ -4824,22 +4824,27 @@
         
         function updateDisplay() {
             // Update main stats
-            document.getElementById('beetleCount').textContent = formatNumber(Math.floor(gameState.beetles));
-            document.getElementById('beetlePerSec').textContent = formatNumber(gameState.beetlesPerSecond);
+            const beetleCountEl = document.getElementById('beetleCount');
+            const beetlePerSecEl = document.getElementById('beetlePerSec');
+            
+            if (beetleCountEl) beetleCountEl.textContent = formatNumber(Math.floor(gameState.beetles));
+            if (beetlePerSecEl) beetlePerSecEl.textContent = formatNumber(gameState.beetlesPerSecond);
             
             // Update upgrade displays
             Object.entries(gameState.upgrades).forEach(([type, upgrade]) => {
                 const costElement = document.getElementById(`${type}-cost`);
                 const ownedElement = document.getElementById(`${type}-owned`);
+                const upgradeElement = document.getElementById(`upgrade-${type}`);
                 
-                if (costElement && ownedElement) {
+                // Update cost and owned display
+                if (costElement) {
                     costElement.textContent = formatNumber(upgrade.cost);
+                }
+                if (ownedElement) {
                     ownedElement.textContent = upgrade.owned;
                 }
                 
                 // Highlight affordable upgrades or mark as maxed
-                const upgradeElement = document.getElementById(`upgrade-${type}`);
-                
                 if (upgradeElement) {
                     if (upgrade.maxOwned && upgrade.owned >= upgrade.maxOwned) {
                         upgradeElement.classList.add('maxed');
