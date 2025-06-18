@@ -1193,6 +1193,16 @@
                         <div class="upgrade-owned">Owned: <span id="temple-owned">0</span></div>
                     </div>
                 </div>
+                
+                <div class="upgrade" id="upgrade-heaven" onclick="buyUpgrade('heaven')">
+                    <div class="upgrade-icon">👑</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Heaven</div>
+                        <div class="upgrade-desc">Ascends to divine realm (+10000/sec)</div>
+                        <div class="upgrade-cost">Cost: <span id="heaven-cost">50000000</span></div>
+                        <div class="upgrade-owned">Owned: <span id="heaven-owned">0</span></div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -2162,6 +2172,11 @@
             };
             
             if (transformations[transformation]) {
+                // Ensure audio context is running
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
                 transformations[transformation]();
                 
                 // Reset after 10 seconds
@@ -2511,6 +2526,418 @@
             playMagicSound(); // Play a nice escape sound
         }
         
+        // Heaven Mode - DIVINE TRANSCENDENCE BEYOND ALL!
+        let heavenMode = false;
+        let originalBeetlesHTMLForHeaven = '';
+        
+        function activateHeavenMode() {
+            heavenMode = true;
+            showMessage('👑✨ BEETLE HEAVEN ACHIEVED! DIVINE TRANSCENDENCE! ✨👑');
+            
+            // Store original beetles HTML before replacing
+            const beetlesContainer = document.querySelector('.beetles-container');
+            originalBeetlesHTMLForHeaven = beetlesContainer.innerHTML;
+            
+            // Replace beetles with divine heavenly realm
+            beetlesContainer.innerHTML = `
+                <div class="heaven-realm" onclick="heavenClick()">
+                    <div class="heaven-crown">👑</div>
+                    <div class="heaven-gates">🌟✨🌟</div>
+                    <div class="heaven-name">DIVINE BEETLE HEAVEN</div>
+                    <div class="heaven-aura"></div>
+                    <div class="heaven-wings">👼👼👼</div>
+                </div>
+                <div class="heaven-escape-button" onclick="escapeHeavenMode()">
+                    <span class="escape-text">🌈 DESCEND FROM HEAVEN 🌈</span>
+                    <span class="escape-hint">(Press CTRL+ESC)</span>
+                </div>
+            `;
+            
+            // Add heaven-specific styles
+            const heavenStyles = document.createElement('style');
+            heavenStyles.id = 'heaven-styles';
+            heavenStyles.textContent = `
+                .heaven-realm {
+                    font-size: 10rem;
+                    animation: heaven-float 4s ease-in-out infinite, heaven-divine-glow 3s ease-in-out infinite alternate;
+                    cursor: pointer;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin: 20px;
+                    filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1));
+                }
+                
+                .heaven-crown {
+                    font-size: 12rem;
+                    animation: crown-rotation 8s linear infinite;
+                    text-shadow: 0 0 100px #FFD700, 0 0 200px #FFFFFF;
+                }
+                
+                .heaven-gates {
+                    font-size: 3rem;
+                    color: #FFD700;
+                    margin: 10px 0;
+                    animation: gates-sparkle 2s ease-in-out infinite;
+                }
+                
+                .heaven-name {
+                    font-size: 2rem;
+                    color: #FFD700;
+                    text-shadow: 3px 3px 0px black, 0 0 50px rgba(255, 215, 0, 1);
+                    font-weight: bold;
+                    margin-top: 15px;
+                    animation: heaven-text-pulse 2s ease-in-out infinite alternate;
+                }
+                
+                .heaven-wings {
+                    font-size: 2rem;
+                    margin-top: 10px;
+                    animation: wings-flutter 1.5s ease-in-out infinite alternate;
+                }
+                
+                .heaven-aura {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 400px;
+                    height: 400px;
+                    background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+                    border-radius: 50%;
+                    animation: heaven-aura-pulse 3s ease-in-out infinite;
+                    pointer-events: none;
+                    z-index: -1;
+                }
+                
+                .heaven-escape-button {
+                    position: fixed;
+                    top: 20px;
+                    left: 20px;
+                    background: linear-gradient(45deg, #FF69B4, #FFB6C1, #FFC0CB);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    border: 3px solid white;
+                    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.6);
+                    transition: all 0.3s ease;
+                    z-index: 2000;
+                    text-align: center;
+                    animation: heaven-escape-pulse 3s ease-in-out infinite;
+                }
+                
+                @keyframes heaven-float {
+                    0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+                    25% { transform: translateY(-30px) scale(1.05) rotate(2deg); }
+                    50% { transform: translateY(-50px) scale(1.1) rotate(0deg); }
+                    75% { transform: translateY(-30px) scale(1.05) rotate(-2deg); }
+                }
+                
+                @keyframes heaven-divine-glow {
+                    0% { 
+                        filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)) 
+                                drop-shadow(0 0 100px rgba(255, 255, 255, 0.8)); 
+                    }
+                    100% { 
+                        filter: drop-shadow(0 0 100px rgba(255, 215, 0, 1)) 
+                                drop-shadow(0 0 200px rgba(255, 255, 255, 1)); 
+                    }
+                }
+                
+                @keyframes crown-rotation {
+                    0% { transform: rotate(0deg) scale(1); }
+                    25% { transform: rotate(90deg) scale(1.1); }
+                    50% { transform: rotate(180deg) scale(1.2); }
+                    75% { transform: rotate(270deg) scale(1.1); }
+                    100% { transform: rotate(360deg) scale(1); }
+                }
+                
+                @keyframes gates-sparkle {
+                    0%, 100% { opacity: 0.8; transform: scale(1); }
+                    50% { opacity: 1; transform: scale(1.2); }
+                }
+                
+                @keyframes heaven-text-pulse {
+                    0% { 
+                        text-shadow: 3px 3px 0px black, 0 0 50px rgba(255, 215, 0, 1);
+                        transform: scale(1);
+                    }
+                    100% { 
+                        text-shadow: 3px 3px 0px black, 0 0 100px rgba(255, 215, 0, 1), 0 0 150px rgba(255, 255, 255, 1);
+                        transform: scale(1.1);
+                    }
+                }
+                
+                @keyframes wings-flutter {
+                    0% { transform: scale(1) rotate(-5deg); }
+                    100% { transform: scale(1.2) rotate(5deg); }
+                }
+                
+                @keyframes heaven-aura-pulse {
+                    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+                    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+                    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+                }
+                
+                @keyframes heaven-escape-pulse {
+                    0%, 100% { 
+                        box-shadow: 0 5px 15px rgba(255, 105, 180, 0.6);
+                        transform: scale(1);
+                    }
+                    50% { 
+                        box-shadow: 0 8px 30px rgba(255, 105, 180, 1);
+                        transform: scale(1.05);
+                    }
+                }
+            `;
+            document.head.appendChild(heavenStyles);
+            
+            // Create divine light beams
+            createDivineLightShow();
+            
+            // Play heavenly chorus sound
+            playHeavenlyChorus();
+            
+            // Transform background to heavenly realm
+            document.body.style.background = 'radial-gradient(ellipse at center, #87CEEB 0%, #E6E6FA 25%, #F0F8FF 50%, #FFD700 75%, #FFFFFF 100%)';
+            document.body.style.backgroundAttachment = 'fixed';
+            
+            // Create floating angel beetles
+            createAngelBeetles();
+            
+            setTimeout(() => {
+                showMessage('👼 THE BEETLES HAVE ACHIEVED DIVINE ENLIGHTENMENT! 👼');
+            }, 2000);
+            
+            setTimeout(() => {
+                showMessage('✨ INFINITE BEETLE PRODUCTION FLOWS FROM THE HEAVENS! ✨');
+            }, 4000);
+            
+            setTimeout(() => {
+                showMessage('🌈 Press CTRL+ESC or click the button to return to earthly realm! 🌈');
+            }, 6000);
+        }
+        
+        function escapeHeavenMode() {
+            if (!heavenMode) return;
+            
+            heavenMode = false;
+            
+            // Restore original beetles
+            const beetlesContainer = document.querySelector('.beetles-container');
+            beetlesContainer.innerHTML = originalBeetlesHTMLForHeaven;
+            
+            // Remove heaven styles
+            const heavenStyles = document.getElementById('heaven-styles');
+            if (heavenStyles) {
+                heavenStyles.remove();
+            }
+            
+            // Restore original background
+            document.body.style.background = '';
+            document.body.style.backgroundAttachment = '';
+            
+            showMessage('🪳 Returned to the earthly realm... but heaven awaits above! 🪳');
+            playMagicSound();
+        }
+        
+        function heavenClick() {
+            const heavenMessages = [
+                '👑 Divine beetles bestow royal blessings!',
+                '✨ Celestial light illuminates your path!',
+                '👼 Angels sing the praises of beetles!',
+                '🌟 The heavens rejoice in your presence!',
+                '🌈 Rainbow bridges connect all beetle realms!',
+                '💎 Crystalline perfection flows through your soul!'
+            ];
+            
+            const randomMessage = heavenMessages[Math.floor(Math.random() * heavenMessages.length)];
+            showMessage(randomMessage);
+            
+            // Heaven click visual effect
+            const heaven = document.querySelector('.heaven-realm');
+            heaven.style.transform = 'scale(1.2)';
+            heaven.style.filter = 'brightness(1.8) saturate(3)';
+            
+            setTimeout(() => {
+                heaven.style.transform = '';
+                heaven.style.filter = '';
+            }, 300);
+            
+            // Random chance for divine blessing
+            if (Math.random() < 0.2) {
+                createDivineBlessing();
+            }
+        }
+        
+        function createDivineLightShow() {
+            // Create cascading light beams from heaven
+            for (let i = 0; i < 12; i++) {
+                const lightBeam = document.createElement('div');
+                lightBeam.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}%;
+                    top: -10%;
+                    width: 6px;
+                    height: 150vh;
+                    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.6), transparent);
+                    animation: light-beam-descent ${8 + Math.random() * 4}s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 1500;
+                    transform: rotate(${Math.random() * 20 - 10}deg);
+                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+                `;
+                document.body.appendChild(lightBeam);
+                
+                setTimeout(() => {
+                    if (lightBeam && lightBeam.parentNode) {
+                        lightBeam.parentNode.removeChild(lightBeam);
+                    }
+                }, 12000);
+            }
+            
+            // Add light beam animation
+            if (!document.getElementById('heaven-light-animations')) {
+                const lightStyle = document.createElement('style');
+                lightStyle.id = 'heaven-light-animations';
+                lightStyle.textContent = `
+                    @keyframes light-beam-descent {
+                        0% { 
+                            transform: translateY(-100vh) rotate(${Math.random() * 20 - 10}deg); 
+                            opacity: 0; 
+                        }
+                        20% { 
+                            opacity: 1; 
+                        }
+                        80% { 
+                            opacity: 0.8; 
+                        }
+                        100% { 
+                            transform: translateY(0) rotate(${Math.random() * 20 - 10}deg); 
+                            opacity: 0; 
+                        }
+                    }
+                `;
+                document.head.appendChild(lightStyle);
+            }
+        }
+        
+        function createAngelBeetles() {
+            // Create floating angel beetles with halos
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const angelBeetle = document.createElement('div');
+                    angelBeetle.textContent = '👼🪳';
+                    angelBeetle.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        font-size: ${2 + Math.random() * 2}rem;
+                        animation: angel-beetle-float ${6 + Math.random() * 4}s ease-in-out infinite;
+                        pointer-events: none;
+                        z-index: 1600;
+                        text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+                    `;
+                    document.body.appendChild(angelBeetle);
+                    
+                    setTimeout(() => {
+                        if (angelBeetle && angelBeetle.parentNode) {
+                            angelBeetle.parentNode.removeChild(angelBeetle);
+                        }
+                    }, 10000);
+                }, i * 300);
+            }
+            
+            // Add angel beetle animation
+            if (!document.getElementById('angel-beetle-animations')) {
+                const angelStyle = document.createElement('style');
+                angelStyle.id = 'angel-beetle-animations';
+                angelStyle.textContent = `
+                    @keyframes angel-beetle-float {
+                        0%, 100% { 
+                            transform: translateY(0px) rotate(0deg) scale(1); 
+                            opacity: 0.8; 
+                        }
+                        25% { 
+                            transform: translateY(-20px) rotate(5deg) scale(1.1); 
+                            opacity: 1; 
+                        }
+                        50% { 
+                            transform: translateY(-40px) rotate(0deg) scale(1.2); 
+                            opacity: 0.9; 
+                        }
+                        75% { 
+                            transform: translateY(-20px) rotate(-5deg) scale(1.1); 
+                            opacity: 1; 
+                        }
+                    }
+                `;
+                document.head.appendChild(angelStyle);
+            }
+        }
+        
+        function playHeavenlyChorus() {
+            // Create ethereal heavenly chorus sound
+            const chorusDuration = 6;
+            const startTime = audioContext.currentTime;
+            
+            // Divine frequency spectrum based on angelic harmonics
+            const heavenlyFreqs = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50]; // C major scale ascending to heaven
+            
+            heavenlyFreqs.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filterNode = audioContext.createBiquadFilter();
+                const reverbGain = audioContext.createGain();
+                
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(reverbGain);
+                reverbGain.connect(masterGain);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime + index * 0.5);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 2, startTime + chorusDuration);
+                oscillator.type = 'sine'; // Pure, angelic sound
+                
+                filterNode.type = 'bandpass';
+                filterNode.frequency.setValueAtTime(freq * 4, startTime);
+                filterNode.frequency.exponentialRampToValueAtTime(freq * 8, startTime + chorusDuration);
+                
+                gainNode.gain.setValueAtTime(0, startTime + index * 0.5);
+                gainNode.gain.linearRampToValueAtTime(0.04, startTime + index * 0.5 + 0.5);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + chorusDuration);
+                
+                // Add heavenly reverb
+                reverbGain.gain.setValueAtTime(0.8, startTime);
+                
+                oscillator.start(startTime + index * 0.5);
+                oscillator.stop(startTime + chorusDuration);
+            });
+            
+            // Add ethereal choir overtones
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const choirOsc = audioContext.createOscillator();
+                    const choirGain = audioContext.createGain();
+                    
+                    choirOsc.connect(choirGain);
+                    choirGain.connect(masterGain);
+                    
+                    choirOsc.frequency.setValueAtTime(800 + Math.random() * 1200, audioContext.currentTime);
+                    choirOsc.type = 'triangle'; // Warm, choir-like sound
+                    
+                    choirGain.gain.setValueAtTime(0.02, audioContext.currentTime);
+                    choirGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 3);
+                    
+                    choirOsc.start(audioContext.currentTime);
+                    choirOsc.stop(audioContext.currentTime + 3);
+                }, i * 400);
+            }
+        }
+        
         function templeClick() {
             const templeMessages = [
                 '🏛️ The temple resonates with ancient power!',
@@ -2708,6 +3135,13 @@
             if (e.key === 'Escape' && templeMode) {
                 e.preventDefault();
                 escapeTempleMode();
+                return;
+            }
+            
+            // CTRL+ESC key to escape heaven mode
+            if (e.key === 'Escape' && (e.ctrlKey || e.metaKey) && heavenMode) {
+                e.preventDefault();
+                escapeHeavenMode();
                 return;
             }
             
@@ -4203,7 +4637,8 @@
                 mine: { owned: 0, cost: 1100, production: 8, maxOwned: null },
                 lab: { owned: 0, cost: 10000, production: 47, maxOwned: null },
                 portal: { owned: 0, cost: 100000, production: 260, maxOwned: null },
-                temple: { owned: 0, cost: 1400000, production: 1400, maxOwned: null }
+                temple: { owned: 0, cost: 1400000, production: 1400, maxOwned: null },
+                heaven: { owned: 0, cost: 50000000, production: 10000, maxOwned: null }
             },
             achievements: {
                 'first-click': { unlocked: false, name: 'First Click', desc: 'Click your first beetle', icon: '🪳' },
@@ -4341,6 +4776,11 @@
                 // Special handling for temple - SHIT GETS REAL!
                 if (type === 'temple' && upgrade.owned === 1) {
                     activateTempleMode();
+                }
+                
+                // Special handling for heaven - DIVINE TRANSCENDENCE!
+                if (type === 'heaven' && upgrade.owned === 1) {
+                    activateHeavenMode();
                 }
                 
                 // Special handling for click power - increase click power
