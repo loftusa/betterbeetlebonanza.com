@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪳 BUMPIN BEETLE BONANZA 🪳</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
+        
+        * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><text y="16" font-size="16">🪳</text></svg>'), auto;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+            animation: flashingColors 1.5s infinite;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        @keyframes flashingColors {
+            0% { background-color: #ff0066; }
+            12.5% { background-color: #00ff66; }
+            25% { background-color: #6600ff; }
+            37.5% { background-color: #ffff00; }
+            50% { background-color: #ff6600; }
+            62.5% { background-color: #00ffff; }
+            75% { background-color: #ff0099; }
+            87.5% { background-color: #99ff00; }
+            100% { background-color: #ff0066; }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .title {
+            font-size: 5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 
+                3px 3px 0px black,
+                6px 6px 0px rgba(255,0,255,0.5),
+                9px 9px 0px rgba(0,255,255,0.3);
+            margin: 20px 0;
+            animation: bounce 0.8s infinite, rainbow-text 2s infinite;
+            text-align: center;
+            white-space: nowrap;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.8));
+            transform: perspective(500px) rotateX(15deg);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: perspective(500px) rotateX(15deg) translateY(0) scale(1); }
+            50% { transform: perspective(500px) rotateX(15deg) translateY(-30px) scale(1.05); }
+        }
+
+        @keyframes rainbow-text {
+            0% { filter: drop-shadow(0 0 20px rgba(255,0,0,0.8)); }
+            16.66% { filter: drop-shadow(0 0 20px rgba(255,165,0,0.8)); }
+            33.33% { filter: drop-shadow(0 0 20px rgba(255,255,0,0.8)); }
+            50% { filter: drop-shadow(0 0 20px rgba(0,255,0,0.8)); }
+            66.66% { filter: drop-shadow(0 0 20px rgba(0,0,255,0.8)); }
+            83.33% { filter: drop-shadow(0 0 20px rgba(128,0,128,0.8)); }
+            100% { filter: drop-shadow(0 0 20px rgba(255,0,0,0.8)); }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            text-shadow: 2px 2px 0px black;
+            margin: -10px 0 20px 0;
+            animation: wiggle 1.5s infinite;
+            font-style: italic;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .music-bar {
+            background: linear-gradient(45deg, rgba(255,0,255,0.9), rgba(0,255,255,0.9));
+            padding: 20px 40px;
+            border-radius: 20px;
+            border: 5px solid white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 
+                0 0 20px rgba(255,255,255,0.5),
+                inset 0 0 20px rgba(0,0,0,0.2);
+            animation: glow-pulse 2s infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.5), inset 0 0 20px rgba(0,0,0,0.2); }
+            50% { box-shadow: 0 0 40px rgba(255,255,255,0.8), inset 0 0 20px rgba(0,0,0,0.2); }
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            color: white;
+            border: 3px solid white;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+            text-shadow: 2px 2px 0px black;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .play-button:hover {
+            background: linear-gradient(45deg, #ff3388, #ff66bb);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(255,0,100,0.5);
+        }
+
+        .play-button:active {
+            transform: scale(0.95);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .volume-label {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0px black;
+        }
+
+        .volume-slider {
+            width: 120px;
+            height: 8px;
+            background: linear-gradient(90deg, #333, #666);
+            outline: none;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff0066, #00ffff);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff0066, #00ffff);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .instruction-text {
+            color: #ff69b4;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 3px 3px 0px black;
+            margin-bottom: 30px;
+            animation: pulse-text 1.5s infinite;
+            text-align: center;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .beetles-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 90%;
+            height: 450px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .beetle {
+            font-size: 8rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.5));
+        }
+
+        .beetle img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.6));
+        }
+
+        .beetle-name {
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 
+                2px 2px 0px black,
+                4px 4px 0px rgba(255,0,255,0.5);
+            margin-top: 15px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid white;
+            animation: name-glow 2s infinite;
+        }
+
+        @keyframes name-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+            50% { box-shadow: 0 0 20px rgba(255,0,255,0.6); }
+        }
+
+        .grangus {
+            animation: circularDance 3s infinite linear;
+        }
+
+        @keyframes circularDance {
+            0% { transform: rotateY(0deg) scale(1); }
+            25% { transform: rotateY(90deg) scale(1.1); }
+            50% { transform: rotateY(180deg) scale(1); }
+            75% { transform: rotateY(270deg) scale(1.1); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+
+        .deet {
+            animation: bobbing 1.2s infinite ease-in-out;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { 
+                transform: translateY(0) rotate(-5deg) scale(1); 
+                filter: drop-shadow(0 0 15px rgba(255,255,0,0.5)); 
+            }
+            50% { 
+                transform: translateY(-40px) rotate(5deg) scale(1.1); 
+                filter: drop-shadow(0 0 25px rgba(255,255,0,0.8)); 
+            }
+        }
+
+        .prosciutto {
+            animation: spin 4s infinite linear;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        @keyframes spin {
+            0% { 
+                transform: rotate(0deg) scale(1); 
+                filter: drop-shadow(0 0 10px #333); 
+            }
+            25% { 
+                transform: rotate(90deg) scale(1.05); 
+                filter: drop-shadow(-25px 0 15px rgba(255,0,255,0.5)); 
+            }
+            50% { 
+                transform: rotate(180deg) scale(1); 
+                filter: drop-shadow(0 25px 15px rgba(0,255,255,0.5)); 
+            }
+            75% { 
+                transform: rotate(270deg) scale(1.05); 
+                filter: drop-shadow(25px 0 15px rgba(255,255,0,0.5)); 
+            }
+            100% { 
+                transform: rotate(360deg) scale(1); 
+                filter: drop-shadow(0 0 10px #333); 
+            }
+        }
+
+        .prosciutto::before,
+        .prosciutto::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://hypixel.net/attachments/image01-gif.1807111/');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.2;
+            z-index: -1;
+            animation: spinShadow 4s infinite linear;
+        }
+
+        .prosciutto::before {
+            animation-delay: -1s;
+            opacity: 0.15;
+        }
+
+        .prosciutto::after {
+            animation-delay: -2s;
+            opacity: 0.1;
+        }
+
+        @keyframes spinShadow {
+            0% { transform: rotate(0deg) scale(1.3); opacity: 0.2; }
+            25% { transform: rotate(90deg) scale(1.2); opacity: 0.15; }
+            50% { transform: rotate(180deg) scale(1.4); opacity: 0.2; }
+            75% { transform: rotate(270deg) scale(1.2); opacity: 0.15; }
+            100% { transform: rotate(360deg) scale(1.3); opacity: 0.2; }
+        }
+
+        .floating-beetles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-beetle {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateX(-100px) rotate(0deg);
+            }
+            to {
+                transform: translateX(calc(100vw + 100px)) rotate(720deg);
+            }
+        }
+
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            animation: secret-pulse 3s infinite;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+
+        .easter-egg:hover {
+            opacity: 1;
+            transform: scale(1.5) rotate(360deg);
+        }
+
+        @keyframes secret-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .retro-text {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-shadow: 0 0 5px #00ff00;
+            animation: matrix-flicker 2s infinite;
+        }
+
+        @keyframes matrix-flicker {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+
+        .party-mode {
+            animation: party-flash 0.1s infinite !important;
+        }
+
+        @keyframes party-flash {
+            0% { background-color: #ff0000; }
+            16.66% { background-color: #ff8800; }
+            33.33% { background-color: #ffff00; }
+            50% { background-color: #00ff00; }
+            66.66% { background-color: #0088ff; }
+            83.33% { background-color: #8800ff; }
+            100% { background-color: #ff0088; }
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 3rem; }
+            .beetle { font-size: 5rem; }
+            .beetle img { width: 150px; height: 150px; }
+            .beetles-container { height: 350px; }
+            .music-bar { 
+                flex-direction: column; 
+                gap: 15px; 
+                padding: 15px 20px; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="retro-text">
+        BEETLE.EXE v2.0.3<br>
+        STATUS: VIBING<br>
+        BUGS: FEATURE
+    </div>
+
+    <div class="floating-beetles" id="floatingBeetles"></div>
+    
+    <h1 class="title">🪳 BUMPIN BEETLE BONANZA 🪳</h1>
+    <div class="subtitle">~est. 2003~ ★ BEETLE RAVE SUPREME ★</div>
+    
+    <div class="music-bar">
+        <button class="play-button" onclick="toggleMusic()">▶ PLAY</button>
+        <div class="volume-control">
+            <span class="volume-label">🔊 VOL:</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="50" oninput="setVolume(this.value)">
+        </div>
+        <audio id="bgMusic" loop>
+            <source src="https://raw.githubusercontent.com/beetlebabe/beetlebabe.github.io/main/dirtbag.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    
+    <p class="instruction-text">★ Click play for MAXIMUM beetle experience ★</p>
+    
+    <div class="beetles-container">
+        <div class="beetle grangus" onclick="beetleClick('grangus')">
+            <img src="https://media.tenor.com/CDFSTMzCc2oAAAAi/roach-cowboy.gif" alt="Grangus Grumby - Cowboy Roach">
+            <div class="beetle-name">GRANGUS GRUMBY</div>
+        </div>
+        
+        <div class="beetle deet" onclick="beetleClick('deet')">
+            <img src="https://img1.picmix.com/output/stamp/normal/9/8/0/1/2161089_e910a.gif" alt="Deet Glorious - Glittery Beetle">
+            <div class="beetle-name">DEET GLORIOUS</div>
+        </div>
+        
+        <div class="beetle prosciutto" onclick="beetleClick('prosciutto')">
+            <img src="https://hypixel.net/attachments/image01-gif.1807111/" alt="Prosciutto - Spinning Beetle">
+            <div class="beetle-name">PROSCIUTTO</div>
+        </div>
+    </div>
+
+    <div class="easter-egg" onclick="activatePartyMode()" title="Secret party mode!">🎉</div>
+
+    <script>
+        let isPlaying = false;
+        const music = document.getElementById('bgMusic');
+        const playButton = document.querySelector('.play-button');
+        let partyMode = false;
+        let clickCount = 0;
+
+        // Create floating beetles
+        function createFloatingBeetles() {
+            const container = document.getElementById('floatingBeetles');
+            const beetles = ['🪳', '🐛', '🦗', '🪲', '🐞'];
+            
+            setInterval(() => {
+                const beetle = document.createElement('div');
+                beetle.className = 'floating-beetle';
+                beetle.textContent = beetles[Math.floor(Math.random() * beetles.length)];
+                beetle.style.top = Math.random() * 100 + '%';
+                beetle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                beetle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(beetle);
+                
+                setTimeout(() => {
+                    if (beetle && beetle.parentNode) {
+                        beetle.parentNode.removeChild(beetle);
+                    }
+                }, 25000);
+            }, 3000);
+        }
+
+        // Audio setup
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let masterGain = audioContext.createGain();
+        masterGain.connect(audioContext.destination);
+        masterGain.gain.value = 0.5;
+
+        function createTone(frequency, duration, startTime) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(masterGain);
+            
+            oscillator.frequency.setValueAtTime(frequency, startTime);
+            oscillator.type = 'square';
+            
+            gainNode.gain.setValueAtTime(0, startTime);
+            gainNode.gain.linearRampToValueAtTime(0.1, startTime + 0.01);
+            gainNode.gain.linearRampToValueAtTime(0.05, startTime + duration - 0.01);
+            gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+            
+            oscillator.start(startTime);
+            oscillator.stop(startTime + duration);
+            
+            return oscillator;
+        }
+
+        function playTeenageDirtbagMelody() {
+            if (!isPlaying) return;
+            
+            const now = audioContext.currentTime;
+            const beatDuration = 0.4;
+            
+            const melody = [
+                {freq: 293.66, duration: beatDuration}, // D4
+                {freq: 329.63, duration: beatDuration}, // E4
+                {freq: 369.99, duration: beatDuration}, // F#4
+                {freq: 329.63, duration: beatDuration}, // E4
+                {freq: 293.66, duration: beatDuration * 2}, // D4
+                {freq: 246.94, duration: beatDuration}, // B3
+                {freq: 293.66, duration: beatDuration}, // D4
+                {freq: 329.63, duration: beatDuration * 2}, // E4
+            ];
+            
+            let currentTime = now;
+            melody.forEach(note => {
+                createTone(note.freq, note.duration, currentTime);
+                currentTime += note.duration;
+            });
+            
+            setTimeout(() => {
+                if (isPlaying) playTeenageDirtbagMelody();
+            }, (currentTime - now) * 1000);
+        }
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                isPlaying = true;
+                playButton.innerHTML = '⏸ STOP';
+                playButton.style.background = 'linear-gradient(45deg, #006600, #00aa00)';
+                
+                music.play().catch(() => {
+                    console.log('Audio file failed, using synthesized version');
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                    playTeenageDirtbagMelody();
+                });
+            } else {
+                isPlaying = false;
+                playButton.innerHTML = '▶ PLAY';
+                playButton.style.background = 'linear-gradient(45deg, #ff0066, #ff3399)';
+                music.pause();
+                music.currentTime = 0;
+                
+                if (audioContext) {
+                    audioContext.suspend();
+                }
+            }
+        }
+
+        function setVolume(value) {
+            const volume = value / 100;
+            music.volume = volume;
+            
+            if (masterGain) {
+                masterGain.gain.value = volume;
+            }
+        }
+
+        function beetleClick(beetleName) {
+            clickCount++;
+            const beetle = document.querySelector(`.${beetleName}`);
+            const messages = {
+                'grangus': ['*CRONCH*', 'yeehaw partner!', 'giddy up!', '*tips hat*'],
+                'deet': ['*rolling intensifies*', 'GLORIOUS!', '*shiny*', 'dung life!'],
+                'prosciutto': ['*spins faster*', 'ciao bella!', '*leaves trail*', 'mama mia!']
+            };
+            
+            // Flash effect
+            beetle.style.filter = 'brightness(2) saturate(2)';
+            setTimeout(() => {
+                beetle.style.filter = '';
+            }, 200);
+            
+            // Random message
+            const message = messages[beetleName][Math.floor(Math.random() * messages[beetleName].length)];
+            showMessage(message);
+            
+            // Easter egg: click all beetles 5+ times each
+            if (clickCount > 15) {
+                activatePartyMode();
+            }
+        }
+
+        function showMessage(text) {
+            const msg = document.createElement('div');
+            msg.textContent = text;
+            msg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.9);
+                color: #ff00ff;
+                padding: 10px 20px;
+                border-radius: 15px;
+                border: 2px solid white;
+                font-size: 1.5rem;
+                font-weight: bold;
+                z-index: 1000;
+                animation: message-pop 2s ease-out forwards;
+                pointer-events: none;
+                text-shadow: 2px 2px 0px black;
+            `;
+            
+            document.body.appendChild(msg);
+            setTimeout(() => {
+                if (msg && msg.parentNode) {
+                    msg.parentNode.removeChild(msg);
+                }
+            }, 2000);
+        }
+
+        function activatePartyMode() {
+            partyMode = !partyMode;
+            const body = document.body;
+            
+            if (partyMode) {
+                body.classList.add('party-mode');
+                showMessage('🎉 PARTY MODE ACTIVATED! 🎉');
+                
+                // Extra effects
+                const beetles = document.querySelectorAll('.beetle');
+                beetles.forEach(beetle => {
+                    beetle.style.animationDuration = '0.5s';
+                });
+                
+                setTimeout(() => {
+                    body.classList.remove('party-mode');
+                    beetles.forEach(beetle => {
+                        beetle.style.animationDuration = '';
+                    });
+                    partyMode = false;
+                }, 10000);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            music.volume = 0.5;
+            createFloatingBeetles();
+            
+            music.addEventListener('ended', () => {
+                isPlaying = false;
+                playButton.innerHTML = '▶ PLAY';
+                playButton.style.background = 'linear-gradient(45deg, #ff0066, #ff3399)';
+            });
+            
+            music.addEventListener('error', (e) => {
+                console.log('Audio loading error:', e);
+            });
+
+            // Add CSS for message animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes message-pop {
+                    0% { 
+                        transform: translate(-50%, -50%) scale(0) rotate(180deg); 
+                        opacity: 0; 
+                    }
+                    50% { 
+                        transform: translate(-50%, -50%) scale(1.2) rotate(0deg); 
+                        opacity: 1; 
+                    }
+                    100% { 
+                        transform: translate(-50%, -50%) scale(0.8) rotate(0deg); 
+                        opacity: 0; 
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Extra retro effects
+        setInterval(() => {
+            const beetles = document.querySelectorAll('.beetle');
+            beetles.forEach(beetle => {
+                beetle.style.filter = `hue-rotate(${Math.random() * 360}deg) drop-shadow(0 0 15px rgba(255,255,255,0.5))`;
+            });
+        }, 2000);
+
+        // Konami code easter egg
+        let konamiCode = [];
+        const konamiSequence = [38,38,40,40,37,39,37,39,66,65]; // ↑↑↓↓←→←→BA
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join('') === konamiSequence.join('')) {
+                showMessage('🪳 KONAMI BEETLE ACTIVATED! 🪳');
+                activatePartyMode();
+                konamiCode = [];
+            }
+        });
+    </script>
+</body>
+</html>
