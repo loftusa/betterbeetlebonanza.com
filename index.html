@@ -3132,6 +3132,13 @@
             console.log('Element exists?', !!document.getElementById('upgrade-clickpower'));
         }
         
+        // Debug function to reset save game
+        window.resetGame = function() {
+            localStorage.removeItem('beetleEmpireState');
+            location.reload();
+            console.log('Game reset! Page reloaded.');
+        }
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             // Konami code
@@ -4982,7 +4989,17 @@
             const saved = localStorage.getItem('beetleEmpireState');
             if (saved) {
                 const savedState = JSON.parse(saved);
-                gameState = { ...gameState, ...savedState };
+                
+                // Merge saved state while preserving new upgrades
+                gameState = { 
+                    ...gameState, 
+                    ...savedState,
+                    upgrades: {
+                        ...gameState.upgrades,
+                        ...savedState.upgrades
+                    }
+                };
+                
                 calculateProduction();
                 calculateClickPower();
                 updateDisplay();
