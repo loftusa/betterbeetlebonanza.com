@@ -281,14 +281,63 @@
             0% { opacity: 1; }
             100% { opacity: 0; }
         }
+        
+        .sacred-clock {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            background: linear-gradient(45deg, #000000, #1a1a2e);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            z-index: 1500;
+        }
+        
+        .sacred-clock:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .sacred-clock.manipulation-mode {
+            border-color: #ff0066;
+            color: #ff0066;
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.3);
+        }
+        
+        .sacred-clock.manipulation-mode:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 102, 0.6);
+        }
+        
+        .clock-time {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .clock-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        @keyframes clock-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
 
         .beetles-container {
             display: flex;
             justify-content: space-around;
             align-items: center;
             width: 90%;
-            height: 450px;
-            margin-top: 30px;
+            height: 400px;
+            margin-top: 10px;
             position: relative;
         }
 
@@ -860,8 +909,9 @@
         /* Buy Me a Coffee Button */
         .donate-button {
             position: fixed;
-            top: 20px;
-            right: 280px;
+            top: 580px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1000;
         }
         
@@ -963,13 +1013,19 @@
         <span style="opacity: 0.3; font-size: 0.6rem;">ORDO AB CHAO</span>
     </div>
     
+    <!-- Sacred Time Display -->
+    <div class="sacred-clock" id="sacredClock" onclick="toggleClockMode()">
+        <div class="clock-time" id="clockTime">00:00:00</div>
+        <div class="clock-label">SACRED TIME</div>
+    </div>
+    
     <!-- Secret Guide -->
     <div style="position: fixed; bottom: 10px; left: 10px; color: #00ff00; font-family: 'Courier New', monospace; font-size: 0.7rem; opacity: 0.4; text-shadow: 0 0 5px #00ff00; line-height: 1.2; max-width: 250px;">
         HIDDEN MYSTERIES AWAIT...<br>
         <span style="opacity: 0.6;">• Click beetles rapidly (5x) for party</span><br>
         <span style="opacity: 0.6;">• Ctrl+D = Disco, Ctrl+M = Matrix</span><br>
         <span style="opacity: 0.6;">• Ctrl+E = Earthquake, Ctrl+Y = Y2K</span><br>
-        <span style="opacity: 0.6;">• G = Grangus disco, P = Mega Prosciutto</span><br>
+        <span style="opacity: 0.6;">• G = Grangus disco, D = Deet prism, P = Mega Prosciutto</span><br>
         <span style="opacity: 0.6;">• B = Beetle invasion, Shift+Space = Speed</span><br>
         <span style="opacity: 0.6;">• Konami code (↑↑↓↓←→←→BA)</span><br>
         <span style="opacity: 0.6;">• Watch clock at 11:11, 23:23, 33:33</span><br>
@@ -981,7 +1037,7 @@
     <div class="floating-beetles" id="floatingBeetles"></div>
     
     <h1 class="title">🪳 BETTER BEETLE BONANZA 🪳</h1>
-    <div class="subtitle">~est. 2003~ ★ BEETLE RAVE SUPREME ★ <span style="opacity: 0.2; font-size: 0.8rem;">∴∵∴</span></div>
+    <div class="subtitle">★ BEETLE RAVE SUPREME ★ <span style="opacity: 0.2; font-size: 0.8rem;">∴∵∴</span></div>
     
     <div class="music-bar">
         <!-- Lab Icon (appears when lab is purchased) -->
@@ -1167,6 +1223,11 @@
         let rapidClickCount = 0;
         let lastClickTime = 0;
         let rapidClickTimeout = null;
+        
+        // Sacred Clock System
+        let clockManipulationMode = false;
+        let fakeTime = null;
+        let clockInterval = null;
 
         // Create floating beetles
         function createFloatingBeetles() {
@@ -1599,7 +1660,112 @@
                 }
             `;
             document.head.appendChild(style);
+            
+            // Initialize sacred clock
+            initSacredClock();
         });
+
+        // Sacred Clock Functions
+        function initSacredClock() {
+            updateClock();
+            clockInterval = setInterval(updateClock, 1000);
+        }
+        
+        function updateClock() {
+            const now = fakeTime || new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('clockTime').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Check for sacred times
+            if (minutes === seconds && ['11', '23', '33'].includes(minutes)) {
+                const clock = document.getElementById('sacredClock');
+                clock.style.animation = 'clock-pulse 0.5s infinite';
+                setTimeout(() => {
+                    clock.style.animation = '';
+                }, 2000);
+            }
+        }
+        
+        function toggleClockMode() {
+            const clock = document.getElementById('sacredClock');
+            
+            if (!clockManipulationMode) {
+                // Enter manipulation mode
+                clockManipulationMode = true;
+                clock.classList.add('manipulation-mode');
+                clock.querySelector('.clock-label').textContent = 'TIME CONTROL';
+                showMessage('⏰ TIME MANIPULATION ACTIVATED!');
+                showMessage('💡 Use number keys to set time: HHMMSS format');
+                
+                // Enable time input mode
+                enableTimeInput();
+            } else {
+                // Exit manipulation mode
+                clockManipulationMode = false;
+                clock.classList.remove('manipulation-mode');
+                clock.querySelector('.clock-label').textContent = 'SACRED TIME';
+                fakeTime = null;
+                showMessage('⏰ Returning to normal time flow...');
+                disableTimeInput();
+            }
+        }
+        
+        let timeInputBuffer = '';
+        let timeInputListener = null;
+        
+        function enableTimeInput() {
+            timeInputListener = (e) => {
+                if (e.key >= '0' && e.key <= '9') {
+                    timeInputBuffer += e.key;
+                    
+                    // Show input progress
+                    const display = document.getElementById('typewriterDisplay');
+                    display.textContent = `Time Input: ${timeInputBuffer}`;
+                    display.classList.add('typing');
+                    
+                    if (timeInputBuffer.length === 6) {
+                        // Parse HHMMSS format
+                        const hours = parseInt(timeInputBuffer.substring(0, 2));
+                        const minutes = parseInt(timeInputBuffer.substring(2, 4));
+                        const seconds = parseInt(timeInputBuffer.substring(4, 6));
+                        
+                        if (hours < 24 && minutes < 60 && seconds < 60) {
+                            fakeTime = new Date();
+                            fakeTime.setHours(hours, minutes, seconds);
+                            showMessage(`⏰ Time set to ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+                        } else {
+                            showMessage('⚠️ Invalid time format! Use HHMMSS (000000-235959)');
+                        }
+                        
+                        timeInputBuffer = '';
+                        display.textContent = '';
+                        display.classList.remove('typing');
+                    }
+                } else if (e.key === 'Escape') {
+                    timeInputBuffer = '';
+                    const display = document.getElementById('typewriterDisplay');
+                    display.textContent = '';
+                    display.classList.remove('typing');
+                    showMessage('⏰ Time input cancelled');
+                }
+            };
+            
+            document.addEventListener('keydown', timeInputListener);
+        }
+        
+        function disableTimeInput() {
+            if (timeInputListener) {
+                document.removeEventListener('keydown', timeInputListener);
+                timeInputListener = null;
+            }
+            timeInputBuffer = '';
+            const display = document.getElementById('typewriterDisplay');
+            display.textContent = '';
+            display.classList.remove('typing');
+        }
 
         // Extra retro effects
         setInterval(() => {
@@ -1710,6 +1876,117 @@
                     beetle.parentNode.removeChild(beetle);
                 }
             }, 4000);
+        }
+        
+        function createPrismExplosion() {
+            // Create rainbow light beams radiating from Deet
+            const deetBeetle = document.querySelector('.deet');
+            const rect = deetBeetle.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Create 8 rainbow beams
+            for (let i = 0; i < 8; i++) {
+                const beam = document.createElement('div');
+                const angle = (i * 45); // 45 degrees apart
+                const colors = ['#ff0000', '#ff8000', '#ffff00', '#00ff00', '#0080ff', '#0000ff', '#8000ff', '#ff00ff'];
+                
+                beam.style.cssText = `
+                    position: fixed;
+                    left: ${centerX}px;
+                    top: ${centerY}px;
+                    width: 4px;
+                    height: 200px;
+                    background: linear-gradient(to bottom, ${colors[i]}, transparent);
+                    transform-origin: 50% 0%;
+                    transform: rotate(${angle}deg);
+                    animation: prism-beam 3s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                    box-shadow: 0 0 20px ${colors[i]};
+                `;
+                document.body.appendChild(beam);
+                
+                setTimeout(() => {
+                    if (beam && beam.parentNode) {
+                        beam.parentNode.removeChild(beam);
+                    }
+                }, 3000);
+            }
+            
+            // Create floating rainbow sparkles
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    const sparkleColors = ['🌈', '✨', '🔆', '💎', '⭐'];
+                    sparkle.textContent = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+                    sparkle.style.cssText = `
+                        position: fixed;
+                        left: ${centerX + (Math.random() - 0.5) * 300}px;
+                        top: ${centerY + (Math.random() - 0.5) * 300}px;
+                        font-size: ${1 + Math.random() * 2}rem;
+                        animation: prism-sparkle 4s ease-out forwards;
+                        pointer-events: none;
+                        z-index: 998;
+                    `;
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        if (sparkle && sparkle.parentNode) {
+                            sparkle.parentNode.removeChild(sparkle);
+                        }
+                    }, 4000);
+                }, i * 100);
+            }
+            
+            // Add prism CSS animations
+            if (!document.getElementById('prism-animations')) {
+                const prismStyle = document.createElement('style');
+                prismStyle.id = 'prism-animations';
+                prismStyle.textContent = `
+                    @keyframes prism-beam {
+                        0% { 
+                            height: 0px; 
+                            opacity: 0; 
+                            box-shadow: 0 0 5px currentColor;
+                        }
+                        25% { 
+                            height: 300px; 
+                            opacity: 1; 
+                            box-shadow: 0 0 30px currentColor;
+                        }
+                        75% { 
+                            height: 300px; 
+                            opacity: 0.8; 
+                            box-shadow: 0 0 25px currentColor;
+                        }
+                        100% { 
+                            height: 0px; 
+                            opacity: 0; 
+                            box-shadow: 0 0 5px currentColor;
+                        }
+                    }
+                    @keyframes prism-sparkle {
+                        0% { 
+                            transform: scale(0) rotate(0deg); 
+                            opacity: 0; 
+                        }
+                        25% { 
+                            transform: scale(1.5) rotate(90deg); 
+                            opacity: 1; 
+                        }
+                        75% { 
+                            transform: scale(1) rotate(270deg); 
+                            opacity: 0.8; 
+                        }
+                        100% { 
+                            transform: scale(0) rotate(360deg); 
+                            opacity: 0; 
+                        }
+                    }
+                `;
+                document.head.appendChild(prismStyle);
+            }
         }
         
         // Secret transformations
@@ -2231,6 +2508,13 @@
                 case 'g':
                     transformBeetle('grangus', 'disco');
                     showMessage('🤠 Grangus goes DISCO!');
+                    break;
+                case 'd':
+                    if (!(e.ctrlKey || e.metaKey)) { // Only if not Ctrl+D (disco mode)
+                        transformBeetle('deet', 'rainbow');
+                        showMessage('✨ DEET BECOMES RAINBOW PRISM! ✨');
+                        createPrismExplosion();
+                    }
                     break;
                 case 'p':
                     transformBeetle('prosciutto', 'giant');
