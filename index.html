@@ -4694,17 +4694,9 @@
         }
         
         function clickBeetle() {
-            // Ensure audio context is running
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-            
             gameState.beetles += gameState.clickPower;
             gameState.totalClicks++;
             gameState.totalBeetles += gameState.clickPower;
-            
-            // Play beetle click sound
-            playBeetleClickSound('clicker');
             
             // Create click effect
             createClickEffect();
