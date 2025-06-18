@@ -1134,7 +1134,7 @@
                     </div>
                 </div>
                 
-                <div class="upgrade" id="upgrade-clickpower" onclick="buyUpgrade('clickpower')">
+                <div class="upgrade" id="upgrade-clickpower" onclick="console.log('Clicked clickpower!'); buyUpgrade('clickpower')">
                     <div class="upgrade-icon">💪</div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Beetle Power</div>
@@ -3116,6 +3116,22 @@
             document.head.appendChild(divineStyle);
         }
         
+        // Debug function to give beetles (type 'beetles' + number)
+        window.giveBeetles = function(amount) {
+            gameState.beetles += amount || 1000;
+            updateDisplay();
+            showMessage(`🐛 DEBUG: Added ${amount || 1000} beetles! Total: ${gameState.beetles}`);
+        }
+        
+        // Debug function to check clickpower
+        window.debugClickpower = function() {
+            console.log('=== CLICKPOWER DEBUG ===');
+            console.log('Beetles:', gameState.beetles);
+            console.log('Clickpower upgrade:', gameState.upgrades.clickpower);
+            console.log('Can afford?', gameState.beetles >= gameState.upgrades.clickpower.cost);
+            console.log('Element exists?', !!document.getElementById('upgrade-clickpower'));
+        }
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             // Konami code
@@ -4729,6 +4745,10 @@
         }
         
         function buyUpgrade(type) {
+            console.log(`Attempting to buy upgrade: ${type}`);
+            console.log(`Current beetles: ${gameState.beetles}`);
+            console.log(`Upgrade cost: ${gameState.upgrades[type].cost}`);
+            
             // Ensure audio context is running
             if (audioContext.state === 'suspended') {
                 audioContext.resume();
@@ -4736,12 +4756,19 @@
             
             const upgrade = gameState.upgrades[type];
             
+            if (!upgrade) {
+                console.error(`Upgrade ${type} not found!`);
+                showMessage(`❌ ERROR: Upgrade ${type} not found!`);
+                return;
+            }
+            
             // Check if upgrade is maxed out
             if (upgrade.maxOwned && upgrade.owned >= upgrade.maxOwned) {
                 showMessage(`🚫 ${type.toUpperCase()} is already maxed out!`);
                 return;
             }
             
+            console.log(`Checking if ${gameState.beetles} >= ${upgrade.cost}`);
             if (gameState.beetles >= upgrade.cost) {
                 gameState.beetles -= upgrade.cost;
                 upgrade.owned++;
@@ -4797,6 +4824,7 @@
                     showMessage(`🏭 ${type.toUpperCase()} purchased! +${upgrade.production}/sec`);
                 }
             } else {
+                console.log(`Purchase failed: ${gameState.beetles} beetles < ${upgrade.cost} cost`);
                 // Play error sound for insufficient beetles
                 playErrorSound();
                 showMessage(`💸 Not enough beetles! Need ${upgrade.cost - gameState.beetles} more`);
