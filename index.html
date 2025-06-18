@@ -1353,9 +1353,6 @@
                 'prosciutto': ['*spins faster*', 'ciao bella!', '*leaves trail*', 'mama mia!']
             };
             
-            // Play beetle-specific click sound
-            playBeetleClickSound(beetleName);
-            
             // Flash effect
             beetle.style.filter = 'brightness(2) saturate(2)';
             setTimeout(() => {
@@ -2300,21 +2297,33 @@
         }
         
         // Temple Mode - SHIT GETS REAL!
+        let templeMode = false;
+        let originalBeetlesHTML = '';
+        
         function activateTempleMode() {
+            templeMode = true;
             showMessage('🏛️ BEETLE TEMPLE ACTIVATED! SHIT GETS REAL! 🏛️');
             
-            // Replace beetles with giant temple
+            // Store original beetles HTML before replacing
             const beetlesContainer = document.querySelector('.beetles-container');
+            originalBeetlesHTML = beetlesContainer.innerHTML;
+            
+            // Replace beetles with giant temple
             beetlesContainer.innerHTML = `
                 <div class="giant-temple" onclick="templeClick()">
                     <div class="temple-emoji">🏛️</div>
                     <div class="temple-name">SACRED BEETLE TEMPLE</div>
                     <div class="temple-glow"></div>
                 </div>
+                <div class="temple-escape-button" onclick="escapeTempleMode()">
+                    <span class="escape-text">🚪 ESCAPE TEMPLE 🚪</span>
+                    <span class="escape-hint">(Press ESC key)</span>
+                </div>
             `;
             
             // Add temple-specific styles
             const templeStyles = document.createElement('style');
+            templeStyles.id = 'temple-styles';
             templeStyles.textContent = `
                 .giant-temple {
                     font-size: 8rem;
@@ -2325,6 +2334,52 @@
                     flex-direction: column;
                     align-items: center;
                     margin: 20px;
+                }
+                
+                .temple-escape-button {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    border: 3px solid white;
+                    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+                    transition: all 0.3s ease;
+                    z-index: 2000;
+                    text-align: center;
+                    animation: escape-pulse 2s ease-in-out infinite;
+                }
+                
+                .temple-escape-button:hover {
+                    background: linear-gradient(45deg, #FF8E53, #FF6B6B);
+                    transform: scale(1.05);
+                    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+                }
+                
+                .escape-text {
+                    display: block;
+                    font-size: 1.2rem;
+                    text-shadow: 2px 2px 0px black;
+                }
+                
+                .escape-hint {
+                    display: block;
+                    font-size: 0.8rem;
+                    opacity: 0.8;
+                    margin-top: 5px;
+                }
+                
+                @keyframes escape-pulse {
+                    0%, 100% { 
+                        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+                    }
+                    50% { 
+                        box-shadow: 0 5px 25px rgba(255, 107, 107, 0.8);
+                    }
                 }
                 
                 .temple-emoji {
@@ -2421,6 +2476,33 @@
             setTimeout(() => {
                 showMessage('⚡ DIVINE BEETLE POWER FLOWS THROUGH THE TEMPLE! ⚡');
             }, 4000);
+            
+            setTimeout(() => {
+                showMessage('🚪 Press ESC or click the escape button to return to the beetles! 🚪');
+            }, 6000);
+        }
+        
+        function escapeTempleMode() {
+            if (!templeMode) return;
+            
+            templeMode = false;
+            
+            // Restore original beetles
+            const beetlesContainer = document.querySelector('.beetles-container');
+            beetlesContainer.innerHTML = originalBeetlesHTML;
+            
+            // Remove temple styles
+            const templeStyles = document.getElementById('temple-styles');
+            if (templeStyles) {
+                templeStyles.remove();
+            }
+            
+            // Restore original background
+            document.body.style.background = '';
+            document.body.style.backgroundAttachment = '';
+            
+            showMessage('🪳 Welcome back to the beetles! The temple awaits your return... 🪳');
+            playMagicSound(); // Play a nice escape sound
         }
         
         function templeClick() {
@@ -2616,6 +2698,13 @@
                 return;
             }
             
+            // ESC key to escape temple mode
+            if (e.key === 'Escape' && templeMode) {
+                e.preventDefault();
+                escapeTempleMode();
+                return;
+            }
+            
             // Secret keyboard shortcuts
             switch(e.key.toLowerCase()) {
                 case 'd':
@@ -2699,8 +2788,8 @@
         let typingTimeout = null;
         let deleteTimeout = null;
         let isDeleting = false;
-        const sacredWords = ['god', 'jesus', 'temple', 'spiral', 'earthquake'];
-        const sacredNumbers = ['23', '33', '77', '144', '777', '1111'];
+        const sacredWords = ['god', 'jesus', 'temple', 'spiral', 'earthquake', 'triangle', 'eye', 'illuminati'];
+        const sacredNumbers = ['23', '33', '77', '144', '666', '777', '1111'];
         
         function updateTypewriterDisplay() {
             const display = document.getElementById('typewriterDisplay');
@@ -2836,6 +2925,31 @@
                     activateEarthquakeMode();
                     startModeCountdown('earthquake', 8, '🌍', () => {
                         showMessage('🌍 The earth settles...');
+                    });
+                    break;
+                case 'triangle':
+                    showMessage('🔺 THE SACRED TRIANGLE APPEARS! 🔺');
+                    createTriangleFormation();
+                    createMasonicTriangle();
+                    startModeCountdown('triangle', 10, '🔺', () => {
+                        showMessage('🔺 The triangle fades into mystery...');
+                    });
+                    break;
+                case 'eye':
+                    showMessage('👁 THE ALL-SEEING EYE AWAKENS! 👁');
+                    activateIlluminatiMode();
+                    startModeCountdown('eye', 11, '👁', () => {
+                        showMessage('👁 The eye retreats to the shadows...');
+                    });
+                    break;
+                case 'illuminati':
+                    showMessage('🔺👁 THE ILLUMINATI REVEALED! 👁🔺');
+                    activateIlluminatiMode();
+                    createMasonicTriangle();
+                    // Extra special effects for full word
+                    setTimeout(() => createDivineBlessing(), 1000);
+                    startModeCountdown('illuminati', 15, '👁🔺', () => {
+                        showMessage('👁🔺 The brotherhood retreats...');
                     });
                     break;
             }
@@ -3084,6 +3198,14 @@
                         showMessage('🌀 The golden ratio fades...');
                     });
                     break;
+                case '666':
+                    showMessage('😈 SIX-SIX-SIX: THE DEVIL AWAKENS! 😈');
+                    createDevilAnimation();
+                    activateHellMode();
+                    startModeCountdown('devil', 13, '😈', () => {
+                        showMessage('😈 The devil retreats to the underworld...');
+                    });
+                    break;
                 case '777':
                     showMessage('🎰 SEVEN-SEVEN-SEVEN: Jackpot of the divine!');
                     // Massive beetle bonus
@@ -3100,6 +3222,223 @@
                     });
                     break;
             }
+        }
+        
+        function createDevilAnimation() {
+            // Create dancing devil in the center
+            const devil = document.createElement('div');
+            devil.textContent = '😈';
+            devil.style.cssText = `
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 8rem;
+                color: #FF0000;
+                animation: devil-dance 2s ease-in-out infinite;
+                pointer-events: none;
+                z-index: 2000;
+                text-shadow: 0 0 30px #FF0000, 0 0 60px #FF6600;
+            `;
+            document.body.appendChild(devil);
+            
+            // Remove after 13 seconds
+            setTimeout(() => {
+                if (devil && devil.parentNode) {
+                    devil.parentNode.removeChild(devil);
+                }
+            }, 13000);
+            
+            // Create falling flames
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const flame = document.createElement('div');
+                    flame.textContent = '🔥';
+                    flame.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: -10%;
+                        font-size: ${1 + Math.random() * 2}rem;
+                        animation: flame-fall ${3 + Math.random() * 2}s linear forwards;
+                        pointer-events: none;
+                        z-index: 1999;
+                    `;
+                    document.body.appendChild(flame);
+                    
+                    setTimeout(() => {
+                        if (flame && flame.parentNode) {
+                            flame.parentNode.removeChild(flame);
+                        }
+                    }, 5000);
+                }, i * 200);
+            }
+            
+            // Add devil animations
+            if (!document.getElementById('devil-animations')) {
+                const devilStyle = document.createElement('style');
+                devilStyle.id = 'devil-animations';
+                devilStyle.textContent = `
+                    @keyframes devil-dance {
+                        0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+                        25% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); }
+                        50% { transform: translate(-50%, -50%) scale(1.1) rotate(-3deg); }
+                        75% { transform: translate(-50%, -50%) scale(1.3) rotate(3deg); }
+                    }
+                    @keyframes flame-fall {
+                        0% { 
+                            transform: translateY(-50px) rotate(0deg); 
+                            opacity: 1; 
+                        }
+                        100% { 
+                            transform: translateY(100vh) rotate(360deg); 
+                            opacity: 0; 
+                        }
+                    }
+                    @keyframes hell-background {
+                        0% { background-color: #000000; }
+                        25% { background-color: #330000; }
+                        50% { background-color: #660000; }
+                        75% { background-color: #CC0000; }
+                        100% { background-color: #FF0000; }
+                    }
+                `;
+                document.head.appendChild(devilStyle);
+            }
+        }
+        
+        function activateHellMode() {
+            // Change background to hellish red
+            document.body.style.animation = 'hell-background 1s ease-in-out infinite alternate';
+            
+            // Play hellish sound
+            playHellSound();
+            
+            // Restore normal after 13 seconds
+            setTimeout(() => {
+                document.body.style.animation = 'flashingColors 1.5s infinite';
+            }, 13000);
+        }
+        
+        function activateIlluminatiMode() {
+            // Create giant all-seeing eye in the center
+            const eye = document.createElement('div');
+            eye.textContent = '👁';
+            eye.style.cssText = `
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 10rem;
+                color: #FFD700;
+                animation: all-seeing-eye 11s ease-in-out forwards;
+                pointer-events: none;
+                z-index: 2000;
+                text-shadow: 0 0 50px #FFD700, 0 0 100px #FFD700;
+            `;
+            document.body.appendChild(eye);
+            
+            // Remove after duration
+            setTimeout(() => {
+                if (eye && eye.parentNode) {
+                    eye.parentNode.removeChild(eye);
+                }
+            }, 11000);
+            
+            // Create floating illuminati symbols
+            const illuminatiSymbols = ['👁', '🔺', '💎', '⚡', '🌟'];
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const symbol = document.createElement('div');
+                    symbol.textContent = illuminatiSymbols[Math.floor(Math.random() * illuminatiSymbols.length)];
+                    symbol.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        font-size: ${2 + Math.random() * 3}rem;
+                        color: #FFD700;
+                        animation: illuminati-float ${5 + Math.random() * 3}s ease-in-out forwards;
+                        pointer-events: none;
+                        z-index: 1999;
+                        text-shadow: 0 0 20px #FFD700;
+                    `;
+                    document.body.appendChild(symbol);
+                    
+                    setTimeout(() => {
+                        if (symbol && symbol.parentNode) {
+                            symbol.parentNode.removeChild(symbol);
+                        }
+                    }, 8000);
+                }, i * 500);
+            }
+            
+            // Change background to mysterious dark blue-gold
+            document.body.style.background = 'radial-gradient(circle, #000033 0%, #000066 50%, #FFD700 100%)';
+            document.body.style.backgroundAttachment = 'fixed';
+            
+            // Restore background after mode ends
+            setTimeout(() => {
+                document.body.style.background = '';
+                document.body.style.backgroundAttachment = '';
+            }, 11000);
+            
+            // Add illuminati animations if not already added
+            if (!document.getElementById('illuminati-animations')) {
+                const illuminatiStyle = document.createElement('style');
+                illuminatiStyle.id = 'illuminati-animations';
+                illuminatiStyle.textContent = `
+                    @keyframes illuminati-float {
+                        0% { 
+                            transform: scale(0) rotate(0deg); 
+                            opacity: 0; 
+                        }
+                        25% { 
+                            transform: scale(1.5) rotate(90deg); 
+                            opacity: 1; 
+                        }
+                        75% { 
+                            transform: scale(1) rotate(270deg); 
+                            opacity: 0.8; 
+                        }
+                        100% { 
+                            transform: scale(0) rotate(360deg); 
+                            opacity: 0; 
+                        }
+                    }
+                `;
+                document.head.appendChild(illuminatiStyle);
+            }
+        }
+        
+        function playHellSound() {
+            // Create ominous hell sound using Web Audio API
+            const hellDuration = 3;
+            const startTime = audioContext.currentTime;
+            
+            // Create deep, ominous frequencies
+            const hellFreqs = [66, 77, 88, 99, 110]; // Very low, ominous frequencies
+            
+            hellFreqs.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filterNode = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(masterGain);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime + index * 0.2);
+                oscillator.type = 'sawtooth'; // Harsh, demonic sound
+                
+                filterNode.type = 'lowpass';
+                filterNode.frequency.setValueAtTime(200 + freq, startTime);
+                
+                gainNode.gain.setValueAtTime(0, startTime + index * 0.2);
+                gainNode.gain.linearRampToValueAtTime(0.1, startTime + index * 0.2 + 0.3);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + hellDuration);
+                
+                oscillator.start(startTime + index * 0.2);
+                oscillator.stop(startTime + hellDuration);
+            });
         }
         
         function createMasonicTriangle() {
