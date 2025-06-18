@@ -712,11 +712,270 @@
             });
         }, 2000);
 
-        // Konami code easter egg
+        // Secret codes and keyboard shortcuts
         let konamiCode = [];
         const konamiSequence = [38,38,40,40,37,39,37,39,66,65]; // ↑↑↓↓←→←→BA
+        let secretModes = {
+            disco: false,
+            matrix: false,
+            earthquake: false,
+            rainbow: false,
+            beetle2000: false
+        };
         
+        // Random surprise events
+        function triggerRandomSurprise() {
+            const surprises = [
+                () => { 
+                    showMessage('🎲 Random beetle fact: Beetles can lift 850x their body weight!');
+                    document.body.style.transform = 'rotate(1deg)';
+                    setTimeout(() => document.body.style.transform = '', 3000);
+                },
+                () => {
+                    showMessage('🌟 *magical beetle dust*');
+                    createSparkleExplosion();
+                },
+                () => {
+                    showMessage('🔊 Beetles are speaking... can you hear them?');
+                    playSecretBeetleSound();
+                },
+                () => {
+                    showMessage('🪳 A wild beetle appears!');
+                    spawnFlyingBeetle();
+                },
+                () => {
+                    showMessage('⏰ Time warp activated!');
+                    document.body.style.animationDuration = '0.1s';
+                    setTimeout(() => document.body.style.animationDuration = '', 5000);
+                }
+            ];
+            
+            const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)];
+            randomSurprise();
+        }
+        
+        // Trigger random surprises
+        setInterval(() => {
+            if (Math.random() < 0.05) { // 5% chance every 10 seconds
+                triggerRandomSurprise();
+            }
+        }, 10000);
+        
+        function createSparkleExplosion() {
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.textContent = '✨';
+                sparkle.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    font-size: 2rem;
+                    animation: sparkle-fall 3s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 1000;
+                `;
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    if (sparkle && sparkle.parentNode) {
+                        sparkle.parentNode.removeChild(sparkle);
+                    }
+                }, 3000);
+            }
+        }
+        
+        function playSecretBeetleSound() {
+            // Create cricket/beetle sounds using Web Audio
+            const sounds = [261.63, 293.66, 329.63, 349.23, 392.00]; // C, D, E, F, G
+            sounds.forEach((freq, i) => {
+                setTimeout(() => {
+                    createTone(freq, 0.2, audioContext.currentTime);
+                }, i * 200);
+            });
+        }
+        
+        function spawnFlyingBeetle() {
+            const beetle = document.createElement('div');
+            beetle.textContent = '🪳';
+            beetle.style.cssText = `
+                position: fixed;
+                left: -100px;
+                top: ${Math.random() * window.innerHeight}px;
+                font-size: 3rem;
+                animation: fly-across 4s linear forwards;
+                z-index: 1000;
+                pointer-events: none;
+            `;
+            document.body.appendChild(beetle);
+            
+            setTimeout(() => {
+                if (beetle && beetle.parentNode) {
+                    beetle.parentNode.removeChild(beetle);
+                }
+            }, 4000);
+        }
+        
+        // Secret transformations
+        function transformBeetle(beetleName, transformation) {
+            const beetle = document.querySelector(`.${beetleName} img`);
+            const originalSrc = beetle.src;
+            
+            const transformations = {
+                disco: () => {
+                    beetle.style.filter = 'hue-rotate(180deg) saturate(300%) brightness(150%)';
+                    beetle.style.transform = 'scale(1.2) rotate(45deg)';
+                },
+                matrix: () => {
+                    beetle.style.filter = 'sepia(100%) hue-rotate(90deg) saturate(200%)';
+                    beetle.style.transform = 'scaleX(-1)';
+                },
+                rainbow: () => {
+                    beetle.style.animation = 'rainbow-spin 1s infinite linear';
+                },
+                giant: () => {
+                    beetle.style.transform = 'scale(2)';
+                    beetle.style.zIndex = '1000';
+                },
+                invisible: () => {
+                    beetle.style.opacity = '0.1';
+                }
+            };
+            
+            if (transformations[transformation]) {
+                transformations[transformation]();
+                
+                // Reset after 10 seconds
+                setTimeout(() => {
+                    beetle.style.filter = '';
+                    beetle.style.transform = '';
+                    beetle.style.animation = '';
+                    beetle.style.opacity = '';
+                    beetle.style.zIndex = '';
+                }, 10000);
+            }
+        }
+        
+        // Text interaction secrets
+        function initTextSecrets() {
+            const title = document.querySelector('.title');
+            const subtitle = document.querySelector('.subtitle');
+            
+            // Secret clicks on title
+            let titleClicks = 0;
+            title.addEventListener('click', () => {
+                titleClicks++;
+                if (titleClicks === 5) {
+                    showMessage('🏆 Title Master Achieved!');
+                    title.style.animation = 'title-mega-bounce 2s infinite';
+                    setTimeout(() => title.style.animation = '', 10000);
+                } else if (titleClicks === 10) {
+                    showMessage('🤯 TITLE OVERLOAD!');
+                    activateDiscoMode();
+                }
+            });
+            
+            // Hover secrets
+            subtitle.addEventListener('mouseenter', () => {
+                if (Math.random() < 0.3) {
+                    subtitle.textContent = '~glitch detected~ ★ ERROR 404: BEETLES NOT FOUND ★';
+                    setTimeout(() => {
+                        subtitle.textContent = '~est. 2003~ ★ BEETLE RAVE SUPREME ★';
+                    }, 2000);
+                }
+            });
+        }
+        
+        // Special modes
+        function activateDiscoMode() {
+            if (secretModes.disco) return;
+            secretModes.disco = true;
+            
+            document.body.style.animation = 'disco-flash 0.1s infinite';
+            showMessage('🕺 DISCO BEETLE MODE! 🕺');
+            
+            setTimeout(() => {
+                document.body.style.animation = 'flashingColors 1.5s infinite';
+                secretModes.disco = false;
+            }, 15000);
+        }
+        
+        function activateMatrixMode() {
+            if (secretModes.matrix) return;
+            secretModes.matrix = true;
+            
+            document.body.style.filter = 'sepia(100%) hue-rotate(90deg)';
+            showMessage('🔢 MATRIX BEETLE MODE 🔢');
+            
+            // Add falling code effect
+            const matrixEffect = document.createElement('div');
+            matrixEffect.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,255,0,0.1) 2px,
+                    rgba(0,255,0,0.1) 4px
+                );
+                animation: matrix-scroll 2s linear infinite;
+                pointer-events: none;
+                z-index: 100;
+            `;
+            document.body.appendChild(matrixEffect);
+            
+            setTimeout(() => {
+                document.body.style.filter = '';
+                if (matrixEffect && matrixEffect.parentNode) {
+                    matrixEffect.parentNode.removeChild(matrixEffect);
+                }
+                secretModes.matrix = false;
+            }, 10000);
+        }
+        
+        function activateEarthquakeMode() {
+            if (secretModes.earthquake) return;
+            secretModes.earthquake = true;
+            
+            showMessage('🌍 EARTHQUAKE MODE! 🌍');
+            document.body.style.animation = 'earthquake 0.1s infinite';
+            
+            setTimeout(() => {
+                document.body.style.animation = 'flashingColors 1.5s infinite';
+                secretModes.earthquake = false;
+            }, 8000);
+        }
+        
+        function activateBeetle2000Mode() {
+            if (secretModes.beetle2000) return;
+            secretModes.beetle2000 = true;
+            
+            showMessage('🚀 BEETLE 2000 MODE! 🚀');
+            
+            // Transform all beetles
+            ['grangus', 'deet', 'prosciutto'].forEach(name => {
+                transformBeetle(name, 'giant');
+            });
+            
+            // Add Y2K effects
+            document.body.style.background = 'linear-gradient(45deg, #ff00ff, #00ffff, #ffff00)';
+            document.body.style.backgroundSize = '400% 400%';
+            document.body.style.animation = 'y2k-gradient 2s ease infinite';
+            
+            setTimeout(() => {
+                document.body.style.background = '';
+                document.body.style.backgroundSize = '';
+                document.body.style.animation = 'flashingColors 1.5s infinite';
+                secretModes.beetle2000 = false;
+            }, 15000);
+        }
+        
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
+            // Konami code
             konamiCode.push(e.keyCode);
             if (konamiCode.length > konamiSequence.length) {
                 konamiCode.shift();
@@ -726,7 +985,141 @@
                 showMessage('🪳 KONAMI BEETLE ACTIVATED! 🪳');
                 activatePartyMode();
                 konamiCode = [];
+                return;
             }
+            
+            // Secret keyboard shortcuts
+            switch(e.key.toLowerCase()) {
+                case 'd':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        activateDiscoMode();
+                    }
+                    break;
+                case 'm':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        activateMatrixMode();
+                    }
+                    break;
+                case 'e':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        activateEarthquakeMode();
+                    }
+                    break;
+                case 'y':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        activateBeetle2000Mode();
+                    }
+                    break;
+                case 'r':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        triggerRandomSurprise();
+                    }
+                    break;
+                case 'g':
+                    transformBeetle('grangus', 'disco');
+                    showMessage('🤠 Grangus goes DISCO!');
+                    break;
+                case 'p':
+                    transformBeetle('prosciutto', 'giant');
+                    showMessage('🍖 MEGA PROSCIUTTO!');
+                    break;
+                case 'b':
+                    // Secret beetle spawn
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => spawnFlyingBeetle(), i * 500);
+                    }
+                    showMessage('🪳 BEETLE INVASION! 🪳');
+                    break;
+                case ' ':
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        // Secret space combination
+                        document.querySelectorAll('.beetle').forEach(beetle => {
+                            beetle.style.animationDuration = '0.1s';
+                        });
+                        showMessage('⚡ BEETLE SPEED BOOST! ⚡');
+                        setTimeout(() => {
+                            document.querySelectorAll('.beetle').forEach(beetle => {
+                                beetle.style.animationDuration = '';
+                            });
+                        }, 3000);
+                    }
+                    break;
+            }
+        });
+        
+        // Initialize all secrets
+        window.addEventListener('load', () => {
+            initTextSecrets();
+            
+            // Add new CSS animations
+            const secretStyles = document.createElement('style');
+            secretStyles.textContent = `
+                @keyframes sparkle-fall {
+                    from { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+                    to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                }
+                
+                @keyframes fly-across {
+                    from { left: -100px; transform: rotate(0deg); }
+                    to { left: calc(100vw + 100px); transform: rotate(360deg); }
+                }
+                
+                @keyframes disco-flash {
+                    0% { background-color: #ff0000; }
+                    10% { background-color: #ff8000; }
+                    20% { background-color: #ffff00; }
+                    30% { background-color: #80ff00; }
+                    40% { background-color: #00ff00; }
+                    50% { background-color: #00ff80; }
+                    60% { background-color: #00ffff; }
+                    70% { background-color: #0080ff; }
+                    80% { background-color: #0000ff; }
+                    90% { background-color: #8000ff; }
+                    100% { background-color: #ff00ff; }
+                }
+                
+                @keyframes matrix-scroll {
+                    from { transform: translateY(-100%); }
+                    to { transform: translateY(100%); }
+                }
+                
+                @keyframes earthquake {
+                    0%, 100% { transform: translateX(0); }
+                    10% { transform: translateX(-2px) rotate(0.5deg); }
+                    20% { transform: translateX(2px) rotate(-0.5deg); }
+                    30% { transform: translateX(-3px) rotate(0.5deg); }
+                    40% { transform: translateX(3px) rotate(-0.5deg); }
+                    50% { transform: translateX(-2px) rotate(0.5deg); }
+                    60% { transform: translateX(2px) rotate(-0.5deg); }
+                    70% { transform: translateX(-1px) rotate(0.5deg); }
+                    80% { transform: translateX(1px) rotate(-0.5deg); }
+                    90% { transform: translateX(-1px) rotate(0.5deg); }
+                }
+                
+                @keyframes y2k-gradient {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                
+                @keyframes title-mega-bounce {
+                    0%, 100% { transform: perspective(500px) rotateX(15deg) translateY(0) scale(1) rotateZ(0deg); }
+                    25% { transform: perspective(500px) rotateX(15deg) translateY(-50px) scale(1.2) rotateZ(5deg); }
+                    75% { transform: perspective(500px) rotateX(15deg) translateY(-30px) scale(1.1) rotateZ(-5deg); }
+                }
+                
+                @keyframes rainbow-spin {
+                    0% { filter: hue-rotate(0deg) saturate(200%) brightness(150%); }
+                    100% { filter: hue-rotate(360deg) saturate(200%) brightness(150%); }
+                }
+            `;
+            document.head.appendChild(secretStyles);
         });
     </script>
 </body>
