@@ -2735,6 +2735,10 @@
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
                         activateBeetle2000Mode();
+                    } else {
+                        e.preventDefault();
+                        activateY2KMode();
+                        showMessage('💿 Y2K BEETLE MILLENNIUM! 💿');
                     }
                     break;
                 case 'r':
@@ -3406,6 +3410,236 @@
                     }
                 `;
                 document.head.appendChild(illuminatiStyle);
+            }
+        }
+        
+        function activateY2KMode() {
+            // Create Y2K themed effects
+            showMessage('💿 WELCOME TO THE MILLENNIUM! 💿');
+            
+            // Create falling Y2K symbols
+            const y2kSymbols = ['💿', '💾', '📺', '💻', '📼', '📻', '⚡', '🌐', '💫', '✨'];
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const symbol = document.createElement('div');
+                    symbol.textContent = y2kSymbols[Math.floor(Math.random() * y2kSymbols.length)];
+                    symbol.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: -10%;
+                        font-size: ${1.5 + Math.random() * 2}rem;
+                        animation: y2k-fall ${4 + Math.random() * 3}s linear forwards;
+                        pointer-events: none;
+                        z-index: 1999;
+                        text-shadow: 0 0 10px #00FFFF;
+                    `;
+                    document.body.appendChild(symbol);
+                    
+                    setTimeout(() => {
+                        if (symbol && symbol.parentNode) {
+                            symbol.parentNode.removeChild(symbol);
+                        }
+                    }, 7000);
+                }, i * 100);
+            }
+            
+            // Create center Y2K logo
+            const y2kLogo = document.createElement('div');
+            y2kLogo.textContent = 'Y2K';
+            y2kLogo.style.cssText = `
+                position: fixed;
+                left: 50%;
+                top: 30%;
+                transform: translate(-50%, -50%);
+                font-size: 8rem;
+                font-weight: bold;
+                color: #00FFFF;
+                font-family: 'Impact', 'Arial Black', sans-serif;
+                animation: y2k-glow 2s ease-in-out infinite alternate;
+                pointer-events: none;
+                z-index: 2000;
+                text-shadow: 
+                    0 0 20px #00FFFF,
+                    0 0 40px #FF00FF,
+                    0 0 60px #FFFF00,
+                    3px 3px 0px #000;
+            `;
+            document.body.appendChild(y2kLogo);
+            
+            // Remove logo after duration
+            setTimeout(() => {
+                if (y2kLogo && y2kLogo.parentNode) {
+                    y2kLogo.parentNode.removeChild(y2kLogo);
+                }
+            }, 12000);
+            
+            // Change background to Y2K cyber theme
+            document.body.style.background = 'linear-gradient(45deg, #000080 0%, #4B0082 25%, #8B008B 50%, #00CED1 75%, #000080 100%)';
+            document.body.style.backgroundSize = '400% 400%';
+            document.body.style.animation = 'y2k-cyber-gradient 3s ease-in-out infinite';
+            
+            // Transform beetles to cyber theme
+            ['grangus', 'deet', 'prosciutto'].forEach(name => {
+                const beetle = document.querySelector(`.${name}`);
+                if (beetle) {
+                    beetle.style.filter = 'hue-rotate(180deg) saturate(200%) brightness(150%) drop-shadow(0 0 10px #00FFFF)';
+                }
+            });
+            
+            // Play Y2K electronic sounds
+            playY2KSound();
+            
+            // Add retro scan lines effect
+            const scanlines = document.createElement('div');
+            scanlines.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 255, 0.03) 2px,
+                    rgba(0, 255, 255, 0.03) 4px
+                );
+                pointer-events: none;
+                z-index: 1998;
+                animation: scanline-flicker 0.15s linear infinite;
+            `;
+            document.body.appendChild(scanlines);
+            
+            // Countdown timer effect
+            setTimeout(() => showMessage('🕑 Checking for Y2K bugs... NONE FOUND! 🕑'), 3000);
+            setTimeout(() => showMessage('💻 System compatibility: 100% BEETLE! 💻'), 6000);
+            setTimeout(() => showMessage('🌐 Welcome to the new millennium of beetles! 🌐'), 9000);
+            
+            // Restore everything after 12 seconds
+            setTimeout(() => {
+                document.body.style.background = '';
+                document.body.style.backgroundSize = '';
+                document.body.style.animation = 'flashingColors 1.5s infinite';
+                
+                // Restore beetle filters
+                ['grangus', 'deet', 'prosciutto'].forEach(name => {
+                    const beetle = document.querySelector(`.${name}`);
+                    if (beetle) {
+                        beetle.style.filter = '';
+                    }
+                });
+                
+                // Remove scanlines
+                if (scanlines && scanlines.parentNode) {
+                    scanlines.parentNode.removeChild(scanlines);
+                }
+            }, 12000);
+            
+            // Add Y2K animations if not already added
+            if (!document.getElementById('y2k-animations')) {
+                const y2kStyle = document.createElement('style');
+                y2kStyle.id = 'y2k-animations';
+                y2kStyle.textContent = `
+                    @keyframes y2k-fall {
+                        0% { 
+                            transform: translateY(-50px) rotate(0deg); 
+                            opacity: 0; 
+                        }
+                        10% { 
+                            opacity: 1; 
+                        }
+                        90% { 
+                            opacity: 1; 
+                        }
+                        100% { 
+                            transform: translateY(100vh) rotate(360deg); 
+                            opacity: 0; 
+                        }
+                    }
+                    @keyframes y2k-glow {
+                        0% { 
+                            color: #00FFFF;
+                            text-shadow: 
+                                0 0 20px #00FFFF,
+                                0 0 40px #FF00FF,
+                                0 0 60px #FFFF00,
+                                3px 3px 0px #000;
+                        }
+                        100% { 
+                            color: #FF00FF;
+                            text-shadow: 
+                                0 0 30px #FF00FF,
+                                0 0 50px #00FFFF,
+                                0 0 70px #FFFF00,
+                                3px 3px 0px #000;
+                        }
+                    }
+                    @keyframes y2k-cyber-gradient {
+                        0% { background-position: 0% 50%; }
+                        50% { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                    }
+                    @keyframes scanline-flicker {
+                        0% { opacity: 0.03; }
+                        50% { opacity: 0.06; }
+                        100% { opacity: 0.03; }
+                    }
+                `;
+                document.head.appendChild(y2kStyle);
+            }
+        }
+        
+        function playY2KSound() {
+            // Create retro electronic Y2K sound
+            const y2kDuration = 4;
+            const startTime = audioContext.currentTime;
+            
+            // Create classic 90s electronic frequencies
+            const y2kFreqs = [220, 440, 880, 1760]; // Doubling frequencies for electronic feel
+            
+            y2kFreqs.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filterNode = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(masterGain);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime + index * 0.3);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 1.5, startTime + y2kDuration);
+                oscillator.type = 'square'; // Classic electronic square wave
+                
+                filterNode.type = 'bandpass';
+                filterNode.frequency.setValueAtTime(freq * 2, startTime);
+                filterNode.frequency.exponentialRampToValueAtTime(freq * 4, startTime + y2kDuration);
+                
+                gainNode.gain.setValueAtTime(0, startTime + index * 0.3);
+                gainNode.gain.linearRampToValueAtTime(0.06, startTime + index * 0.3 + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + y2kDuration);
+                
+                oscillator.start(startTime + index * 0.3);
+                oscillator.stop(startTime + y2kDuration);
+            });
+            
+            // Add some digital blips and beeps
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => {
+                    const blipOsc = audioContext.createOscillator();
+                    const blipGain = audioContext.createGain();
+                    
+                    blipOsc.connect(blipGain);
+                    blipGain.connect(masterGain);
+                    
+                    blipOsc.frequency.setValueAtTime(1000 + Math.random() * 1000, audioContext.currentTime);
+                    blipOsc.type = 'square';
+                    
+                    blipGain.gain.setValueAtTime(0.04, audioContext.currentTime);
+                    blipGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                    
+                    blipOsc.start(audioContext.currentTime);
+                    blipOsc.stop(audioContext.currentTime + 0.1);
+                }, i * 400);
             }
         }
         
