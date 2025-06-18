@@ -2138,6 +2138,8 @@
                 disco: () => {
                     beetle.style.filter = 'hue-rotate(180deg) saturate(300%) brightness(150%)';
                     beetle.style.transform = 'scale(1.2) rotate(45deg)';
+                    // Play groovy disco sound for Grangus
+                    playGrangusDiscoSound();
                 },
                 matrix: () => {
                     beetle.style.filter = 'sepia(100%) hue-rotate(90deg) saturate(200%)';
@@ -2145,10 +2147,14 @@
                 },
                 rainbow: () => {
                     beetle.style.animation = 'rainbow-spin 1s infinite linear';
+                    // Play magical rainbow sound for Deet
+                    playDeetRainbowSound();
                 },
                 giant: () => {
                     beetle.style.transform = 'scale(2)';
                     beetle.style.zIndex = '1000';
+                    // Play epic growth sound for Prosciutto
+                    playProsciuttoGiantSound();
                 },
                 invisible: () => {
                     beetle.style.opacity = '0.1';
@@ -3641,6 +3647,164 @@
                     blipOsc.stop(audioContext.currentTime + 0.1);
                 }, i * 400);
             }
+        }
+        
+        function playGrangusDiscoSound() {
+            // Groovy disco sound for cowboy Grangus
+            const discoNote = 130.81; // C3 - funky bass note
+            const duration = 2.5;
+            const startTime = audioContext.currentTime;
+            
+            // Funky bass line
+            const bassNotes = [discoNote, discoNote * 1.25, discoNote * 1.5, discoNote * 2]; // C, E, G, C
+            bassNotes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                const filter = audioContext.createBiquadFilter();
+                
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                
+                osc.frequency.setValueAtTime(freq, startTime + i * 0.2);
+                osc.type = 'sawtooth'; // Funky bass sound
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(300 + i * 50, startTime + i * 0.2);
+                
+                gain.gain.setValueAtTime(0, startTime + i * 0.2);
+                gain.gain.linearRampToValueAtTime(0.08, startTime + i * 0.2 + 0.05);
+                gain.gain.linearRampToValueAtTime(0.04, startTime + i * 0.2 + 0.15);
+                gain.gain.linearRampToValueAtTime(0, startTime + i * 0.2 + 0.2);
+                
+                osc.start(startTime + i * 0.2);
+                osc.stop(startTime + i * 0.2 + 0.2);
+            });
+            
+            // Add cowboy "yeehaw" high pitch accent
+            setTimeout(() => {
+                const yeehawOsc = audioContext.createOscillator();
+                const yeehawGain = audioContext.createGain();
+                
+                yeehawOsc.connect(yeehawGain);
+                yeehawGain.connect(masterGain);
+                
+                yeehawOsc.frequency.setValueAtTime(659.25, audioContext.currentTime); // E5
+                yeehawOsc.frequency.exponentialRampToValueAtTime(523.25, audioContext.currentTime + 0.3); // Slide down to C5
+                yeehawOsc.type = 'triangle';
+                
+                yeehawGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                yeehawGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                
+                yeehawOsc.start(audioContext.currentTime);
+                yeehawOsc.stop(audioContext.currentTime + 0.3);
+            }, 400);
+        }
+        
+        function playDeetRainbowSound() {
+            // Magical rainbow sound for glorious Deet (similar to spiral but more sparkly)
+            const rainbowDuration = 3;
+            const startTime = audioContext.currentTime;
+            
+            // Create rainbow frequency spectrum
+            const rainbowFreqs = [261.63, 329.63, 392.00, 493.88, 587.33, 698.46, 783.99]; // C major scale
+            
+            rainbowFreqs.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                const filterNode = audioContext.createBiquadFilter();
+                
+                oscillator.connect(filterNode);
+                filterNode.connect(gainNode);
+                gainNode.connect(masterGain);
+                
+                oscillator.frequency.setValueAtTime(freq, startTime + index * 0.15);
+                oscillator.frequency.exponentialRampToValueAtTime(freq * 1.8, startTime + rainbowDuration);
+                oscillator.type = 'sine'; // Pure, crystalline sound
+                
+                filterNode.type = 'bandpass';
+                filterNode.frequency.setValueAtTime(freq * 3, startTime);
+                filterNode.frequency.exponentialRampToValueAtTime(freq * 6, startTime + rainbowDuration);
+                
+                gainNode.gain.setValueAtTime(0, startTime + index * 0.15);
+                gainNode.gain.linearRampToValueAtTime(0.06, startTime + index * 0.15 + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + rainbowDuration);
+                
+                oscillator.start(startTime + index * 0.15);
+                oscillator.stop(startTime + rainbowDuration);
+            });
+            
+            // Add sparkly overtones
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const sparkleOsc = audioContext.createOscillator();
+                    const sparkleGain = audioContext.createGain();
+                    
+                    sparkleOsc.connect(sparkleGain);
+                    sparkleGain.connect(masterGain);
+                    
+                    sparkleOsc.frequency.setValueAtTime(1000 + Math.random() * 1500, audioContext.currentTime);
+                    sparkleOsc.type = 'sine';
+                    
+                    sparkleGain.gain.setValueAtTime(0.03, audioContext.currentTime);
+                    sparkleGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                    
+                    sparkleOsc.start(audioContext.currentTime);
+                    sparkleOsc.stop(audioContext.currentTime + 0.2);
+                }, i * 200);
+            }
+        }
+        
+        function playProsciuttoGiantSound() {
+            // Epic growth sound for mega Prosciutto
+            const growthDuration = 2.5;
+            const startTime = audioContext.currentTime;
+            
+            // Deep rumbling growth with rising pitch
+            const growthOsc = audioContext.createOscillator();
+            const growthGain = audioContext.createGain();
+            const growthFilter = audioContext.createBiquadFilter();
+            
+            growthOsc.connect(growthFilter);
+            growthFilter.connect(growthGain);
+            growthGain.connect(masterGain);
+            
+            growthOsc.frequency.setValueAtTime(55, startTime); // Very low A1
+            growthOsc.frequency.exponentialRampToValueAtTime(220, startTime + growthDuration); // Rise to A3
+            growthOsc.type = 'sawtooth'; // Rich harmonic content
+            
+            growthFilter.type = 'lowpass';
+            growthFilter.frequency.setValueAtTime(200, startTime);
+            growthFilter.frequency.exponentialRampToValueAtTime(1000, startTime + growthDuration);
+            
+            growthGain.gain.setValueAtTime(0, startTime);
+            growthGain.gain.linearRampToValueAtTime(0.08, startTime + 0.3);
+            growthGain.gain.linearRampToValueAtTime(0.1, startTime + 1);
+            growthGain.gain.exponentialRampToValueAtTime(0.001, startTime + growthDuration);
+            
+            growthOsc.start(startTime);
+            growthOsc.stop(startTime + growthDuration);
+            
+            // Add Italian "mama mia!" accent notes
+            const italianNotes = [523.25, 659.25, 783.99]; // C5, E5, G5 - cheerful Italian scale
+            italianNotes.forEach((freq, i) => {
+                setTimeout(() => {
+                    const accentOsc = audioContext.createOscillator();
+                    const accentGain = audioContext.createGain();
+                    
+                    accentOsc.connect(accentGain);
+                    accentGain.connect(masterGain);
+                    
+                    accentOsc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    accentOsc.type = 'triangle';
+                    
+                    accentGain.gain.setValueAtTime(0.04, audioContext.currentTime);
+                    accentGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                    
+                    accentOsc.start(audioContext.currentTime);
+                    accentOsc.stop(audioContext.currentTime + 0.3);
+                }, 800 + i * 200);
+            });
         }
         
         function playHellSound() {
