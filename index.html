@@ -245,6 +245,42 @@
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.8; }
         }
+        
+        .typewriter-display {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff00;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 30px;
+            position: relative;
+        }
+        
+        .typewriter-display::after {
+            content: '|';
+            animation: cursor-blink 1s infinite;
+            color: #00ff00;
+        }
+        
+        .typewriter-display.typing::after {
+            animation: cursor-blink 0.5s infinite;
+        }
+        
+        .typewriter-display.empty::after {
+            display: none;
+        }
+        
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes text-delete {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
 
         .beetles-container {
             display: flex;
@@ -944,6 +980,9 @@
     </div>
     
     <p class="instruction-text">★ Click play for MAXIMUM beetle experience ★</p>
+    
+    <!-- Typewriter Display for Sacred Words -->
+    <div class="typewriter-display" id="typewriterDisplay"></div>
     
     <div class="beetles-container">
         <div class="beetle grangus" onclick="beetleClick('grangus')">
@@ -2192,33 +2231,84 @@
             }
         });
         
-        // Sacred Word System
+        // Sacred Word System with Typewriter Display
         let typedText = '';
         let typingTimeout = null;
+        let deleteTimeout = null;
+        let isDeleting = false;
         const sacredWords = ['god', 'jesus', 'temple', 'spiral'];
+        
+        function updateTypewriterDisplay() {
+            const display = document.getElementById('typewriterDisplay');
+            if (typedText.length > 0) {
+                display.textContent = typedText;
+                display.classList.add('typing');
+                display.classList.remove('empty');
+            } else {
+                display.textContent = '';
+                display.classList.remove('typing');
+                display.classList.add('empty');
+            }
+        }
+        
+        function deleteTextWithAnimation() {
+            if (isDeleting || typedText.length === 0) return;
+            
+            isDeleting = true;
+            const display = document.getElementById('typewriterDisplay');
+            display.classList.remove('typing');
+            
+            const deleteInterval = setInterval(() => {
+                if (typedText.length > 0) {
+                    typedText = typedText.slice(0, -1);
+                    updateTypewriterDisplay();
+                } else {
+                    clearInterval(deleteInterval);
+                    isDeleting = false;
+                    display.classList.add('empty');
+                }
+            }, 50); // Delete one character every 50ms
+        }
         
         document.addEventListener('keydown', (e) => {
             // Only track letter keys for sacred words
             if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
-                typedText += e.key.toLowerCase();
+                // Stop any ongoing deletion
+                if (isDeleting) {
+                    isDeleting = false;
+                }
                 
-                // Clear typing after 3 seconds of inactivity
+                typedText += e.key.toLowerCase();
+                updateTypewriterDisplay();
+                
+                // Clear timeouts
                 if (typingTimeout) clearTimeout(typingTimeout);
+                if (deleteTimeout) clearTimeout(deleteTimeout);
+                
+                // Set new timeout for auto-deletion after 2 seconds of inactivity
                 typingTimeout = setTimeout(() => {
-                    typedText = '';
-                }, 3000);
+                    deleteTimeout = setTimeout(() => {
+                        deleteTextWithAnimation();
+                    }, 500); // Wait 0.5s before starting deletion
+                }, 2000); // Wait 2s of inactivity
                 
                 // Check if any sacred word was typed
                 sacredWords.forEach(word => {
                     if (typedText.includes(word)) {
                         activateSacredWord(word);
-                        typedText = ''; // Reset after finding a word
+                        // Clear text immediately when word is found
+                        typedText = '';
+                        updateTypewriterDisplay();
+                        // Cancel pending deletions
+                        if (typingTimeout) clearTimeout(typingTimeout);
+                        if (deleteTimeout) clearTimeout(deleteTimeout);
                     }
                 });
                 
                 // Limit typed text length to prevent memory issues
                 if (typedText.length > 20) {
                     typedText = typedText.slice(-10);
+                    updateTypewriterDisplay();
                 }
             }
         });
