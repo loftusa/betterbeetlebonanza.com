@@ -599,33 +599,6 @@
             50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,0,100,0.5); }
         }
         
-        .empire-hotkey-hint {
-            position: fixed;
-            bottom: 50%;
-            right: 20px;
-            background: linear-gradient(45deg, #1a1a2e, #000000);
-            color: #FFD700;
-            border: 2px solid #FFD700;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            font-size: 0.9rem;
-            z-index: 1500;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-            animation: hint-pulse 3s ease-in-out infinite;
-        }
-        
-        .empire-hotkey-hint strong {
-            color: #FF6B35;
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px #FF6B35;
-        }
-        
-        @keyframes hint-pulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-        }
 
         @keyframes secret-pulse {
             0%, 100% { opacity: 0.3; }
@@ -689,7 +662,7 @@
         
         .clicker-toggle {
             position: absolute;
-            left: 0px;
+            left: -70px;
             top: 50%;
             transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -704,6 +677,7 @@
             transition: all 0.3s;
             white-space: nowrap;
             animation: toggle-pulse 3s ease-in-out infinite;
+            z-index: 2000;
         }
         
         .clicker-toggle:hover {
@@ -714,11 +688,11 @@
         @keyframes toggle-pulse {
             0%, 100% { 
                 box-shadow: 0 0 15px rgba(255,215,0,0.8);
-                left: 0px;
+                left: -70px;
             }
             50% { 
                 box-shadow: 0 0 25px rgba(255,215,0,1);
-                left: 5px;
+                left: -60px;
             }
         }
         
@@ -937,7 +911,7 @@
         /* Buy Me a Coffee Button */
         .donate-button {
             position: fixed;
-            top: 700px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
@@ -1113,11 +1087,6 @@
         🎉 PARTY: 30s
     </div>
     
-    <!-- Hotkey Hint for Beetle Empire -->
-    <div class="empire-hotkey-hint">
-        Press <strong>E</strong> to open<br>
-        Beetle Empire
-    </div>
     
     <!-- Buy Me a Coffee Donate Button -->
     <div class="donate-button">
@@ -2513,6 +2482,12 @@
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
                         activateDiscoMode();
+                    } else {
+                        // Deet's rainbow prism effect
+                        e.preventDefault();
+                        transformBeetle('deet', 'rainbow');
+                        showMessage('✨ DEET BECOMES RAINBOW PRISM! ✨');
+                        createPrismExplosion();
                     }
                     break;
                 case 'm':
@@ -2525,13 +2500,6 @@
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
                         activateEarthquakeMode();
-                    } else {
-                        // Open Beetle Empire with E key
-                        e.preventDefault();
-                        if (!gameState.clickerOpen) {
-                            toggleClicker();
-                            showMessage('🪳 Beetle Empire opened with hotkey!');
-                        }
                     }
                     break;
                 case 'y':
@@ -2629,6 +2597,13 @@
         document.addEventListener('keydown', (e) => {
             // Track letter and number keys for sacred words/numbers
             if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9]/)) {
+                // Skip if this is a keyboard shortcut (standalone letter with special meaning)
+                const standaloneShortcuts = ['g', 'p', 'd', 'b'];
+                if (standaloneShortcuts.includes(e.key.toLowerCase()) && typedText.length === 0) {
+                    // Don't process standalone shortcuts in sacred word system
+                    return;
+                }
+                
                 // Stop any ongoing deletion
                 if (isDeleting) {
                     isDeleting = false;
