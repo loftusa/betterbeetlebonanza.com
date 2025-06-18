@@ -425,7 +425,7 @@
             transform: scale(1.5) rotate(360deg);
         }
         
-        .party-countdown {
+        .mode-countdown {
             position: fixed;
             top: 20px;
             right: 20px;
@@ -444,8 +444,49 @@
             animation: countdown-pulse 1s infinite;
         }
         
-        .party-countdown.visible {
+        .mode-countdown.visible {
             display: block;
+        }
+        
+        .mode-countdown.party {
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+        }
+        
+        .mode-countdown.disco {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+        }
+        
+        .mode-countdown.matrix {
+            background: linear-gradient(45deg, #000000, #00ff00);
+            color: #00ff00;
+        }
+        
+        .mode-countdown.earthquake {
+            background: linear-gradient(45deg, #8B4513, #D2691E);
+        }
+        
+        .mode-countdown.beetle2000 {
+            background: linear-gradient(45deg, #ff00ff, #ffff00);
+        }
+        
+        .mode-countdown.temple {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: black;
+        }
+        
+        .mode-countdown.blessing {
+            background: linear-gradient(45deg, #FFFFFF, #FFD700);
+            color: black;
+        }
+        
+        .mode-countdown.spiral {
+            background: linear-gradient(45deg, #FFD700, #FF8C00);
+            color: black;
+        }
+        
+        .mode-countdown.temple-blessing {
+            background: linear-gradient(45deg, #FFD700, #FFFFFF);
+            color: black;
         }
         
         @keyframes countdown-pulse {
@@ -764,7 +805,7 @@
         .donate-button {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            left: 280px;
             z-index: 1000;
         }
         
@@ -876,7 +917,8 @@
         <span style="opacity: 0.6;">• B = Beetle invasion, Shift+Space = Speed</span><br>
         <span style="opacity: 0.6;">• Konami code (↑↑↓↓←→←→BA)</span><br>
         <span style="opacity: 0.6;">• Watch clock at 11:11, 23:23, 33:33</span><br>
-        <span style="opacity: 0.5; font-size: 0.6rem;">SEEK THE TRIANGLE AND THE EYE</span>
+        <span style="opacity: 0.5; font-size: 0.6rem;">SEEK THE TRIANGLE AND THE EYE</span><br>
+        <span style="opacity: 0.4; font-size: 0.55rem; color: #ffff00;">Sacred words: god, jesus, temple, spiral</span>
     </div>
 
     <div class="floating-beetles" id="floatingBeetles"></div>
@@ -922,8 +964,8 @@
 
     <div class="easter-egg" onclick="activatePartyMode()" title="Secret party mode!">🎉</div>
     
-    <!-- Party Mode Countdown Timer -->
-    <div class="party-countdown" id="partyCountdown">
+    <!-- Universal Mode Countdown Timer -->
+    <div class="mode-countdown" id="modeCountdown">
         🎉 PARTY: 30s
     </div>
     
@@ -1193,9 +1235,58 @@
                 beetle.style.filter = '';
             }, 200);
             
-            // Random message
-            const message = messages[beetleName][Math.floor(Math.random() * messages[beetleName].length)];
-            showMessage(message, beetle);
+            // 10% chance to show educational hints about secrets
+            if (Math.random() < 0.1) {
+                const secretHints = [
+                    // Keyboard shortcuts
+                    'psst... try holding Ctrl and pressing D',
+                    'the letter G does something special...',
+                    'P makes me grow huge!',
+                    'B summons my cousins from the void',
+                    'Shift+Space makes everything FAST',
+                    'what happens if you press ↑↑↓↓←→←→BA?',
+                    
+                    // Sacred words
+                    'whisper the name of the divine one...',
+                    'speak of the savior and be blessed',
+                    'the sacred building holds great power',
+                    'the golden ratio hides in spiraling forms',
+                    
+                    // Time-based secrets
+                    'at 11:11, the universe aligns',
+                    'when minutes match seconds, magic happens',
+                    'sacred numbers: 23, 33... when do they appear?',
+                    
+                    // Click-based secrets
+                    'click us rapidly and feel the party!',
+                    'click the sparkly things for surprises',
+                    'the empire to the right holds riches',
+                    
+                    // Hidden elements
+                    'inspect the source, young padawan',
+                    'the console speaks to those who listen',
+                    'hidden symbols lurk in the shadows',
+                    'triangles and eyes watch from above',
+                    
+                    // Game mechanics
+                    'when you build the temple, reality changes',
+                    'upgrade icons can be clicked for fun',
+                    'the bottom corner holds ancient wisdom',
+                    
+                    // Easter eggs
+                    'combine Ctrl with letters for magic',
+                    'the sacred dance requires 5 quick taps',
+                    'coffee supports the beetle cause',
+                    'fibonacci sequences unlock mysteries'
+                ];
+                
+                const hint = secretHints[Math.floor(Math.random() * secretHints.length)];
+                showMessage(`💡 ${hint}`, beetle);
+            } else {
+                // Normal random message
+                const message = messages[beetleName][Math.floor(Math.random() * messages[beetleName].length)];
+                showMessage(message, beetle);
+            }
             
             // Rapid click system for party mode activation
             if (currentTime - lastClickTime < 800) { // If clicked within 800ms of last click
@@ -1289,19 +1380,72 @@
             }, 2000);
         }
 
-        let partyCountdownInterval = null;
-        let partyTimeRemaining = 0;
+        // Universal mode countdown system
+        let modeCountdownInterval = null;
+        let modeTimeRemaining = 0;
+        let currentMode = null;
+        
+        function startModeCountdown(modeName, duration, emoji, stopCallback) {
+            // Stop any existing countdown
+            if (modeCountdownInterval) {
+                clearInterval(modeCountdownInterval);
+            }
+            
+            currentMode = modeName;
+            modeTimeRemaining = duration;
+            const countdown = document.getElementById('modeCountdown');
+            
+            // Set the appropriate style for this mode
+            countdown.className = `mode-countdown ${modeName} visible`;
+            
+            // Update display immediately
+            updateModeCountdownDisplay(emoji, modeName.toUpperCase());
+            
+            // Start countdown timer
+            modeCountdownInterval = setInterval(() => {
+                modeTimeRemaining--;
+                updateModeCountdownDisplay(emoji, modeName.toUpperCase());
+                
+                if (modeTimeRemaining <= 0) {
+                    stopModeCountdown();
+                    if (stopCallback) stopCallback();
+                }
+            }, 1000);
+        }
+        
+        function updateModeCountdownDisplay(emoji, modeName) {
+            const countdown = document.getElementById('modeCountdown');
+            countdown.textContent = `${emoji} ${modeName}: ${modeTimeRemaining}s`;
+            
+            // Change style as time runs out
+            if (modeTimeRemaining <= 3) {
+                countdown.style.background = 'linear-gradient(45deg, #ff0000, #ff6600)';
+                countdown.style.animation = 'countdown-pulse 0.5s infinite';
+            } else if (modeTimeRemaining <= 7) {
+                countdown.style.background = 'linear-gradient(45deg, #ff6600, #ffaa00)';
+            }
+        }
+        
+        function stopModeCountdown() {
+            if (modeCountdownInterval) {
+                clearInterval(modeCountdownInterval);
+                modeCountdownInterval = null;
+            }
+            
+            const countdown = document.getElementById('modeCountdown');
+            countdown.classList.remove('visible');
+            countdown.style.background = '';
+            countdown.style.animation = 'countdown-pulse 1s infinite';
+            currentMode = null;
+        }
         
         function activatePartyMode() {
             if (partyMode) return; // Prevent multiple activations
             
             partyMode = true;
-            partyTimeRemaining = 30;
             const body = document.body;
-            const partyCountdown = document.getElementById('partyCountdown');
             
             body.classList.add('party-mode');
-            partyCountdown.classList.add('visible');
             showMessage('🎉 PARTY MODE ACTIVATED! 🎉');
             
             // Extra effects
@@ -1310,30 +1454,8 @@
                 beetle.style.animationDuration = '0.5s';
             });
             
-            // Start countdown timer
-            updateCountdownDisplay();
-            partyCountdownInterval = setInterval(() => {
-                partyTimeRemaining--;
-                updateCountdownDisplay();
-                
-                if (partyTimeRemaining <= 0) {
-                    stopPartyMode();
-                }
-            }, 1000);
-        }
-        
-        function updateCountdownDisplay() {
-            const partyCountdown = document.getElementById('partyCountdown');
-            partyCountdown.textContent = `🎉 PARTY: ${partyTimeRemaining}s`;
-            
-            // Change color as time runs out
-            if (partyTimeRemaining <= 5) {
-                partyCountdown.style.background = 'linear-gradient(45deg, #ff0000, #ff6600)';
-            } else if (partyTimeRemaining <= 10) {
-                partyCountdown.style.background = 'linear-gradient(45deg, #ff6600, #ffaa00)';
-            } else {
-                partyCountdown.style.background = 'linear-gradient(45deg, #ff0066, #ff3399)';
-            }
+            // Start universal countdown
+            startModeCountdown('party', 30, '🎉', stopPartyMode);
         }
         
         function stopPartyMode() {
@@ -1341,17 +1463,9 @@
             
             partyMode = false;
             const body = document.body;
-            const partyCountdown = document.getElementById('partyCountdown');
             const beetles = document.querySelectorAll('.beetle');
             
-            // Clear countdown interval
-            if (partyCountdownInterval) {
-                clearInterval(partyCountdownInterval);
-                partyCountdownInterval = null;
-            }
-            
             body.classList.remove('party-mode');
-            partyCountdown.classList.remove('visible');
             beetles.forEach(beetle => {
                 beetle.style.animationDuration = '';
             });
@@ -1616,10 +1730,10 @@
             document.body.style.animation = 'disco-flash 0.1s infinite';
             showMessage('🕺 DISCO BEETLE MODE! 🕺');
             
-            setTimeout(() => {
+            startModeCountdown('disco', 15, '🕺', () => {
                 document.body.style.animation = 'flashingColors 1.5s infinite';
                 secretModes.disco = false;
-            }, 15000);
+            });
         }
         
         function activateMatrixMode() {
@@ -2077,6 +2191,166 @@
                     break;
             }
         });
+        
+        // Sacred Word System
+        let typedText = '';
+        let typingTimeout = null;
+        const sacredWords = ['god', 'jesus', 'temple', 'spiral'];
+        
+        document.addEventListener('keydown', (e) => {
+            // Only track letter keys for sacred words
+            if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
+                typedText += e.key.toLowerCase();
+                
+                // Clear typing after 3 seconds of inactivity
+                if (typingTimeout) clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    typedText = '';
+                }, 3000);
+                
+                // Check if any sacred word was typed
+                sacredWords.forEach(word => {
+                    if (typedText.includes(word)) {
+                        activateSacredWord(word);
+                        typedText = ''; // Reset after finding a word
+                    }
+                });
+                
+                // Limit typed text length to prevent memory issues
+                if (typedText.length > 20) {
+                    typedText = typedText.slice(-10);
+                }
+            }
+        });
+        
+        function activateSacredWord(word) {
+            switch(word) {
+                case 'god':
+                    showMessage('✨ DIVINE INTERVENTION! ✨');
+                    createDivineBlessing();
+                    break;
+                case 'jesus':
+                    showMessage('🙏 BLESSED BY THE SAVIOR! 🙏');
+                    // Multiply beetle production by 5 for 10 seconds
+                    const oldProduction = gameState.beetlesPerSecond;
+                    gameState.beetlesPerSecond *= 5;
+                    startModeCountdown('blessing', 10, '🙏', () => {
+                        calculateProduction(); // Reset to normal
+                    });
+                    break;
+                case 'temple':
+                    showMessage('🏛️ THE TEMPLE CALLS TO YOU! 🏛️');
+                    if (gameState.upgrades.temple.owned > 0) {
+                        // If temple is owned, create special effect
+                        createTempleBlessing();
+                    } else {
+                        // Give discount on temple
+                        gameState.upgrades.temple.cost = Math.floor(gameState.upgrades.temple.cost * 0.8);
+                        showMessage('🏛️ Temple discount granted! 20% off!');
+                        updateDisplay();
+                    }
+                    break;
+                case 'spiral':
+                    showMessage('🌀 THE GOLDEN SPIRAL AWAKENS! 🌀');
+                    createGoldenSpiralEffect();
+                    startModeCountdown('spiral', 8, '🌀', () => {
+                        showMessage('🌀 Spiral energy fades...');
+                    });
+                    break;
+            }
+        }
+        
+        function createGoldenSpiralEffect() {
+            const phi = 1.618033988749;
+            for (let i = 0; i < 12; i++) {
+                const spiral = document.createElement('div');
+                spiral.textContent = '🌀';
+                spiral.style.cssText = `
+                    position: fixed;
+                    left: ${50 + (40 * Math.cos(i * phi * 0.5))}%;
+                    top: ${50 + (40 * Math.sin(i * phi * 0.5))}%;
+                    font-size: ${1 + i * 0.2}rem;
+                    color: gold;
+                    opacity: 0.8;
+                    animation: spiral-spin ${3 + i * 0.3}s linear infinite, spiral-fade 8s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                    transform-origin: center;
+                `;
+                document.body.appendChild(spiral);
+                
+                setTimeout(() => {
+                    if (spiral && spiral.parentNode) {
+                        spiral.parentNode.removeChild(spiral);
+                    }
+                }, 8000);
+            }
+            
+            // Add spiral CSS animations
+            if (!document.getElementById('spiral-animations')) {
+                const spiralStyle = document.createElement('style');
+                spiralStyle.id = 'spiral-animations';
+                spiralStyle.textContent = `
+                    @keyframes spiral-spin {
+                        from { transform: rotate(0deg) scale(0.5); }
+                        to { transform: rotate(720deg) scale(1.5); }
+                    }
+                    @keyframes spiral-fade {
+                        0% { opacity: 0.8; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(spiralStyle);
+            }
+        }
+        
+        function createTempleBlessing() {
+            // Create multiple temple emojis floating around
+            for (let i = 0; i < 5; i++) {
+                const temple = document.createElement('div');
+                temple.textContent = '🏛️';
+                temple.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    font-size: 3rem;
+                    color: gold;
+                    opacity: 0.9;
+                    animation: temple-blessing-float 6s ease-in-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                `;
+                document.body.appendChild(temple);
+                
+                setTimeout(() => {
+                    if (temple && temple.parentNode) {
+                        temple.parentNode.removeChild(temple);
+                    }
+                }, 6000);
+            }
+            
+            // Boost beetle production temporarily
+            const oldProduction = gameState.beetlesPerSecond;
+            gameState.beetlesPerSecond *= 10;
+            startModeCountdown('temple-blessing', 6, '🏛️', () => {
+                calculateProduction(); // Reset to normal
+            });
+            
+            // Add temple blessing animation
+            if (!document.getElementById('temple-blessing-animations')) {
+                const templeStyle = document.createElement('style');
+                templeStyle.id = 'temple-blessing-animations';
+                templeStyle.textContent = `
+                    @keyframes temple-blessing-float {
+                        0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+                        50% { transform: translateY(50vh) scale(1.5) rotate(180deg); opacity: 1; }
+                        100% { transform: translateY(-20vh) scale(0.8) rotate(360deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(templeStyle);
+            }
+        }
         
         // Sacred geometry and numerology secrets
         let sacredSequence = [];
