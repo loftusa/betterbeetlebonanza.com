@@ -598,6 +598,34 @@
             0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
             50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,0,100,0.5); }
         }
+        
+        .empire-hotkey-hint {
+            position: fixed;
+            bottom: 50%;
+            right: 20px;
+            background: linear-gradient(45deg, #1a1a2e, #000000);
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 1500;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            animation: hint-pulse 3s ease-in-out infinite;
+        }
+        
+        .empire-hotkey-hint strong {
+            color: #FF6B35;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px #FF6B35;
+        }
+        
+        @keyframes hint-pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
 
         @keyframes secret-pulse {
             0%, 100% { opacity: 0.3; }
@@ -661,7 +689,7 @@
         
         .clicker-toggle {
             position: absolute;
-            left: -30px;
+            left: 0px;
             top: 50%;
             transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -686,11 +714,11 @@
         @keyframes toggle-pulse {
             0%, 100% { 
                 box-shadow: 0 0 15px rgba(255,215,0,0.8);
-                left: -30px;
+                left: 0px;
             }
             50% { 
                 box-shadow: 0 0 25px rgba(255,215,0,1);
-                left: -25px;
+                left: 5px;
             }
         }
         
@@ -1083,6 +1111,12 @@
     <!-- Universal Mode Countdown Timer -->
     <div class="mode-countdown" id="modeCountdown">
         🎉 PARTY: 30s
+    </div>
+    
+    <!-- Hotkey Hint for Beetle Empire -->
+    <div class="empire-hotkey-hint">
+        Press <strong>E</strong> to open<br>
+        Beetle Empire
     </div>
     
     <!-- Buy Me a Coffee Donate Button -->
@@ -2491,6 +2525,13 @@
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
                         activateEarthquakeMode();
+                    } else {
+                        // Open Beetle Empire with E key
+                        e.preventDefault();
+                        if (!gameState.clickerOpen) {
+                            toggleClicker();
+                            showMessage('🪳 Beetle Empire opened with hotkey!');
+                        }
                     }
                     break;
                 case 'y':
