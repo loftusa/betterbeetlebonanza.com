@@ -515,7 +515,7 @@
         
         .clicker-toggle {
             position: absolute;
-            left: -100px;
+            left: -60px;
             top: 50%;
             transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -526,14 +526,26 @@
             font-weight: bold;
             font-size: 0.9rem;
             border: 2px solid white;
-            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+            box-shadow: 0 0 15px rgba(255,215,0,0.8);
             transition: all 0.3s;
             white-space: nowrap;
+            animation: toggle-pulse 3s ease-in-out infinite;
         }
         
         .clicker-toggle:hover {
             background: linear-gradient(45deg, #FFA500, #FF8C00);
             transform: translateY(-50%) rotate(-90deg) scale(1.1);
+        }
+        
+        @keyframes toggle-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 15px rgba(255,215,0,0.8);
+                left: -60px;
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(255,215,0,1);
+                left: -55px;
+            }
         }
         
         .clicker-header {
@@ -855,14 +867,15 @@
     </div>
     
     <!-- Secret Guide -->
-    <div style="position: fixed; bottom: 10px; left: 10px; color: #00ff00; font-family: 'Courier New', monospace; font-size: 0.7rem; opacity: 0.4; text-shadow: 0 0 5px #00ff00; line-height: 1.2; max-width: 200px;">
+    <div style="position: fixed; bottom: 10px; left: 10px; color: #00ff00; font-family: 'Courier New', monospace; font-size: 0.7rem; opacity: 0.4; text-shadow: 0 0 5px #00ff00; line-height: 1.2; max-width: 250px;">
         HIDDEN MYSTERIES AWAIT...<br>
-        <span style="opacity: 0.6;">• Click beetles for messages</span><br>
-        <span style="opacity: 0.6;">• Try keyboard shortcuts</span><br>
-        <span style="opacity: 0.6;">• Watch the clock at sacred times</span><br>
-        <span style="opacity: 0.6;">• Type ancient words of power</span><br>
-        <span style="opacity: 0.6;">• Inspect elements for hidden text</span><br>
-        <span style="opacity: 0.6;">• Check console for initiate messages</span><br>
+        <span style="opacity: 0.6;">• Click beetles rapidly (5x) for party</span><br>
+        <span style="opacity: 0.6;">• Ctrl+D = Disco, Ctrl+M = Matrix</span><br>
+        <span style="opacity: 0.6;">• Ctrl+E = Earthquake, Ctrl+Y = Y2K</span><br>
+        <span style="opacity: 0.6;">• G = Grangus disco, P = Mega Prosciutto</span><br>
+        <span style="opacity: 0.6;">• B = Beetle invasion, Shift+Space = Speed</span><br>
+        <span style="opacity: 0.6;">• Konami code (↑↑↓↓←→←→BA)</span><br>
+        <span style="opacity: 0.6;">• Watch clock at 11:11, 23:23, 33:33</span><br>
         <span style="opacity: 0.5; font-size: 0.6rem;">SEEK THE TRIANGLE AND THE EYE</span>
     </div>
 
