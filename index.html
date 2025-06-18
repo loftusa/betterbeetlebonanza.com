@@ -662,7 +662,7 @@
         
         .clicker-toggle {
             position: absolute;
-            left: -70px;
+            left: -110px;
             top: 50%;
             transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(45deg, #FFD700, #FFA500);
@@ -688,11 +688,11 @@
         @keyframes toggle-pulse {
             0%, 100% { 
                 box-shadow: 0 0 15px rgba(255,215,0,0.8);
-                left: -70px;
+                left: -110px;
             }
             50% { 
                 box-shadow: 0 0 25px rgba(255,215,0,1);
-                left: -60px;
+                left: -100px;
             }
         }
         
@@ -1353,6 +1353,9 @@
                 'prosciutto': ['*spins faster*', 'ciao bella!', '*leaves trail*', 'mama mia!']
             };
             
+            // Play beetle-specific click sound
+            playBeetleClickSound(beetleName);
+            
             // Flash effect
             beetle.style.filter = 'brightness(2) saturate(2)';
             setTimeout(() => {
@@ -1730,6 +1733,25 @@
                     display.classList.add('typing');
                     
                     if (timeInputBuffer.length === 6) {
+                        // Check for funny easter egg numbers first
+                        if (timeInputBuffer === '000069') {
+                            showMessage('😏 Nice! Time is now... nice.');
+                            activateNiceMode();
+                            timeInputBuffer = '';
+                            display.textContent = '';
+                            display.classList.remove('typing');
+                            return;
+                        }
+                        
+                        if (timeInputBuffer === '000420' || timeInputBuffer === '042000') {
+                            showMessage('🌿 Blaze it! Time to get groovy!');
+                            activate420Mode();
+                            timeInputBuffer = '';
+                            display.textContent = '';
+                            display.classList.remove('typing');
+                            return;
+                        }
+                        
                         // Parse HHMMSS format
                         const hours = parseInt(timeInputBuffer.substring(0, 2));
                         const minutes = parseInt(timeInputBuffer.substring(2, 4));
@@ -1856,6 +1878,124 @@
             sounds.forEach((freq, i) => {
                 setTimeout(() => {
                     createTone(freq, 0.2, audioContext.currentTime);
+                }, i * 200);
+            });
+        }
+        
+        function playBeetleClickSound(beetleName) {
+            const sounds = {
+                'grangus': () => {
+                    // Cowboy beetle - deep twangy sound
+                    createTone(110, 0.3, audioContext.currentTime); // Deep bass
+                    createTone(220, 0.2, audioContext.currentTime + 0.1); // Twang
+                },
+                'deet': () => {
+                    // Glorious beetle - sparkly chime sound
+                    const chimes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                    chimes.forEach((freq, i) => {
+                        createTone(freq, 0.15, audioContext.currentTime + i * 0.05);
+                    });
+                },
+                'prosciutto': () => {
+                    // Italian beetle - accordion-like sound
+                    createTone(261.63, 0.2, audioContext.currentTime); // C4
+                    createTone(329.63, 0.2, audioContext.currentTime + 0.1); // E4
+                    createTone(392.00, 0.2, audioContext.currentTime + 0.2); // G4
+                },
+                'clicker': () => {
+                    // Main clicker beetle - satisfying click sound
+                    createTone(440, 0.15, audioContext.currentTime); // A4
+                    createTone(880, 0.1, audioContext.currentTime + 0.05); // A5 - higher pitch overlay
+                }
+            };
+            
+            if (sounds[beetleName]) {
+                sounds[beetleName]();
+            }
+        }
+        
+        function playPartyModeSound() {
+            // Upbeat party sound
+            const partyNotes = [262, 294, 330, 349, 392, 440, 494]; // C major scale
+            partyNotes.forEach((freq, i) => {
+                setTimeout(() => {
+                    createTone(freq, 0.1, audioContext.currentTime);
+                    createTone(freq * 2, 0.1, audioContext.currentTime); // Octave up
+                }, i * 100);
+            });
+        }
+        
+        function playUpgradeSound() {
+            // Achievement/upgrade sound
+            const upgradeFreqs = [440, 554, 659, 880]; // A4, C#5, E5, A5
+            upgradeFreqs.forEach((freq, i) => {
+                setTimeout(() => {
+                    createTone(freq, 0.2, audioContext.currentTime);
+                }, i * 80);
+            });
+        }
+        
+        function playErrorSound() {
+            // Error/cannot afford sound
+            createTone(147, 0.3, audioContext.currentTime); // D3 - low and disappointing
+            createTone(123, 0.4, audioContext.currentTime + 0.2); // B2 - even lower
+        }
+        
+        function playMagicSound() {
+            // For special effects and transformations
+            const magicFreqs = [330, 415, 523, 659, 831, 1047]; // Ascending magical scale
+            magicFreqs.forEach((freq, i) => {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(masterGain);
+                    
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    osc.type = 'triangle'; // Softer magical sound
+                    
+                    gain.gain.setValueAtTime(0, audioContext.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                    
+                    osc.start(audioContext.currentTime);
+                    osc.stop(audioContext.currentTime + 0.5);
+                }, i * 100);
+            });
+        }
+        
+        function playDiscoSound() {
+            // Funky disco beat
+            const discoPattern = [262, 262, 330, 330, 392, 392, 523, 523];
+            discoPattern.forEach((freq, i) => {
+                setTimeout(() => {
+                    createTone(freq, 0.15, audioContext.currentTime);
+                    // Add bass line
+                    if (i % 2 === 0) {
+                        createTone(freq / 4, 0.2, audioContext.currentTime);
+                    }
+                }, i * 150);
+            });
+        }
+        
+        function playEarthquakeSound() {
+            // Rumbling earthquake sound
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const freq = 40 + Math.random() * 60; // Very low frequencies
+                    createTone(freq, 0.3, audioContext.currentTime);
+                }, i * 200);
+            }
+        }
+        
+        function playJackpotSound() {
+            // Casino jackpot celebration
+            const jackpotMelody = [523, 659, 784, 1047, 1319, 1568, 2093]; // Rising celebration
+            jackpotMelody.forEach((freq, i) => {
+                setTimeout(() => {
+                    createTone(freq, 0.3, audioContext.currentTime);
+                    // Add sparkle overtones
+                    createTone(freq * 1.5, 0.2, audioContext.currentTime + 0.1);
                 }, i * 200);
             });
         }
@@ -3343,6 +3483,29 @@
         };
         
         // Beetle Clicker Functions
+        function clickUpgradeIcon(type) {
+            // Ensure audio context is running
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            // Play specific sound effects for upgrade icons
+            if (type === 'lab') {
+                // Lab icon - scientific bubbling sound
+                const bubbleFreqs = [300, 400, 350, 450]; // Bubbling pattern
+                bubbleFreqs.forEach((freq, i) => {
+                    setTimeout(() => {
+                        createTone(freq, 0.2, audioContext.currentTime);
+                    }, i * 100);
+                });
+                showMessage('🧪 Beetle Lab activated! Science in progress!');
+            } else if (type === 'portal') {
+                // Portal icon - mystical portal sound
+                playGoldenSpiralSound(); // Reuse the spiral sound for portals
+                showMessage('🌀 Interdimensional Portal activated! Beetles incoming!');
+            }
+        }
+        
         function toggleClicker() {
             const panel = document.getElementById('beetleClicker');
             const toggle = document.getElementById('toggleText');
@@ -3359,9 +3522,17 @@
         }
         
         function clickBeetle() {
+            // Ensure audio context is running
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
             gameState.beetles += gameState.clickPower;
             gameState.totalClicks++;
             gameState.totalBeetles += gameState.clickPower;
+            
+            // Play beetle click sound
+            playBeetleClickSound('clicker');
             
             // Create click effect
             createClickEffect();
@@ -3394,6 +3565,11 @@
         }
         
         function buyUpgrade(type) {
+            // Ensure audio context is running
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
             const upgrade = gameState.upgrades[type];
             
             // Check if upgrade is maxed out
@@ -3405,6 +3581,9 @@
             if (gameState.beetles >= upgrade.cost) {
                 gameState.beetles -= upgrade.cost;
                 upgrade.owned++;
+                
+                // Play upgrade purchase sound
+                playUpgradeSound();
                 
                 // Special handling for cursor - activate beetle cursor
                 if (type === 'cursor' && upgrade.owned === 1) {
@@ -3449,6 +3628,8 @@
                     showMessage(`🏭 ${type.toUpperCase()} purchased! +${upgrade.production}/sec`);
                 }
             } else {
+                // Play error sound for insufficient beetles
+                playErrorSound();
                 showMessage(`💸 Not enough beetles! Need ${upgrade.cost - gameState.beetles} more`);
             }
         }
