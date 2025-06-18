@@ -8,6 +8,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
         
         * {
+            cursor: auto;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .beetle-cursor {
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><text y="16" font-size="16">🪳</text></svg>'), auto;
         }
 
@@ -108,6 +116,45 @@
                 0 0 20px rgba(255,255,255,0.5),
                 inset 0 0 20px rgba(0,0,0,0.2);
             animation: glow-pulse 2s infinite;
+            position: relative;
+        }
+        
+        .upgrade-icon-display {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            animation: upgrade-idle 2s ease-in-out infinite;
+            display: none;
+        }
+        
+        .upgrade-icon-display.visible {
+            display: block;
+        }
+        
+        .upgrade-icon-display:hover {
+            transform: translateY(-50%) scale(1.2);
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.8));
+        }
+        
+        .upgrade-icon-display:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+        
+        .lab-icon {
+            left: -80px;
+        }
+        
+        .portal-icon {
+            right: -80px;
+        }
+        
+        @keyframes upgrade-idle {
+            0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+            50% { transform: translateY(-50%) rotate(2deg); }
         }
 
         @keyframes glow-pulse {
@@ -377,6 +424,34 @@
             opacity: 1;
             transform: scale(1.5) rotate(360deg);
         }
+        
+        .party-countdown {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff0066, #ff3399);
+            color: white;
+            border: 3px solid white;
+            padding: 10px 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 10px;
+            font-family: 'Comic Sans MS', cursive;
+            text-shadow: 2px 2px 0px black;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 2000;
+            display: none;
+            animation: countdown-pulse 1s infinite;
+        }
+        
+        .party-countdown.visible {
+            display: block;
+        }
+        
+        @keyframes countdown-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 25px rgba(255,0,100,0.5); }
+        }
 
         @keyframes secret-pulse {
             0%, 100% { opacity: 0.3; }
@@ -425,12 +500,13 @@
             background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(50,0,50,0.95));
             border: 3px solid #FFD700;
             border-radius: 15px 0 0 15px;
-            padding: 20px;
+            padding: 0;
             box-shadow: -5px 0 20px rgba(0,0,0,0.5);
             transition: right 0.5s ease;
             z-index: 1000;
-            overflow-y: auto;
             font-family: 'Comic Sans MS', cursive;
+            display: flex;
+            flex-direction: column;
         }
         
         .beetle-clicker-panel.open {
@@ -439,24 +515,30 @@
         
         .clicker-toggle {
             position: absolute;
-            left: -80px;
+            left: -100px;
             top: 50%;
             transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(45deg, #FFD700, #FFA500);
             color: black;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 10px 10px 0 0;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             border: 2px solid white;
             box-shadow: 0 0 10px rgba(255,215,0,0.5);
             transition: all 0.3s;
+            white-space: nowrap;
         }
         
         .clicker-toggle:hover {
             background: linear-gradient(45deg, #FFA500, #FF8C00);
             transform: translateY(-50%) rotate(-90deg) scale(1.1);
+        }
+        
+        .clicker-header {
+            padding: 20px 20px 0 20px;
+            flex-shrink: 0;
         }
         
         .clicker-header h3 {
@@ -492,9 +574,16 @@
             margin-left: 5px;
         }
         
+        .clicker-fixed-section {
+            padding: 0 20px 20px 20px;
+            flex-shrink: 0;
+            border-bottom: 2px solid #FFD700;
+            margin-bottom: 20px;
+        }
+        
         .main-beetle-clicker {
             text-align: center;
-            margin: 20px 0;
+            margin: 20px 0 0 0;
             cursor: pointer;
             background: radial-gradient(circle, rgba(255,215,0,0.3), transparent);
             border-radius: 20px;
@@ -529,9 +618,15 @@
             text-shadow: 2px 2px 0px black;
         }
         
+        .clicker-scrollable-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 20px 20px;
+        }
+        
         .upgrades-section h4, .achievements-section h4 {
             color: #FFD700;
-            margin: 20px 0 10px 0;
+            margin: 0 0 10px 0;
             text-shadow: 2px 2px 0px black;
         }
         
@@ -563,6 +658,17 @@
         
         .upgrade.affordable:hover {
             background: rgba(0,255,0,0.2);
+        }
+        
+        .upgrade.maxed {
+            border-color: #666;
+            background: rgba(100,100,100,0.2);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .upgrade.maxed .upgrade-cost {
+            color: #888;
         }
         
         .upgrade-icon {
@@ -754,6 +860,9 @@
     <div class="subtitle">~est. 2003~ ★ BEETLE RAVE SUPREME ★ <span style="opacity: 0.2; font-size: 0.8rem;">∴∵∴</span></div>
     
     <div class="music-bar">
+        <!-- Lab Icon (appears when lab is purchased) -->
+        <div class="upgrade-icon-display lab-icon" id="labIcon" onclick="clickUpgradeIcon('lab')">🧪</div>
+        
         <button class="play-button" onclick="toggleMusic()">▶ PLAY</button>
         <div class="volume-control">
             <span class="volume-label">🔊 VOL:</span>
@@ -762,6 +871,9 @@
         <audio id="bgMusic" loop>
             <source src="https://raw.githubusercontent.com/beetlebabe/beetlebabe.github.io/main/dirtbag.mp3" type="audio/mpeg">
         </audio>
+        
+        <!-- Portal Icon (appears when portal is purchased) -->
+        <div class="upgrade-icon-display portal-icon" id="portalIcon" onclick="clickUpgradeIcon('portal')">🌀</div>
     </div>
     
     <p class="instruction-text">★ Click play for MAXIMUM beetle experience ★</p>
@@ -784,6 +896,11 @@
     </div>
 
     <div class="easter-egg" onclick="activatePartyMode()" title="Secret party mode!">🎉</div>
+    
+    <!-- Party Mode Countdown Timer -->
+    <div class="party-countdown" id="partyCountdown">
+        🎉 PARTY: 30s
+    </div>
     
     <!-- Buy Me a Coffee Donate Button -->
     <div class="donate-button">
@@ -810,14 +927,17 @@
             </div>
         </div>
         
-        <div class="main-beetle-clicker" onclick="clickBeetle()">
-            <div class="giant-beetle">🪳</div>
-            <div class="click-text">CLICK FOR BEETLES!</div>
+        <div class="clicker-fixed-section">
+            <div class="main-beetle-clicker" onclick="clickBeetle()">
+                <div class="giant-beetle">🪳</div>
+                <div class="click-text">CLICK FOR BEETLES!</div>
+            </div>
         </div>
         
-        <div class="upgrades-section">
-            <h4>🏭 BEETLE PRODUCTION</h4>
-            <div class="upgrade-grid">
+        <div class="clicker-scrollable-section">
+            <div class="upgrades-section">
+                <h4>🏭 BEETLE PRODUCTION</h4>
+                <div class="upgrade-grid">
                 <div class="upgrade" id="upgrade-cursor" onclick="buyUpgrade('cursor')">
                     <div class="upgrade-icon">👆</div>
                     <div class="upgrade-info">
@@ -825,6 +945,16 @@
                         <div class="upgrade-desc">Auto-clicks beetles</div>
                         <div class="upgrade-cost">Cost: <span id="cursor-cost">15</span></div>
                         <div class="upgrade-owned">Owned: <span id="cursor-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-clickpower" onclick="buyUpgrade('clickpower')">
+                    <div class="upgrade-icon">💪</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Power</div>
+                        <div class="upgrade-desc">+1 beetle per click</div>
+                        <div class="upgrade-cost">Cost: <span id="clickpower-cost">50</span></div>
+                        <div class="upgrade-owned">Owned: <span id="clickpower-owned">0</span></div>
                     </div>
                 </div>
                 
@@ -853,7 +983,7 @@
                     <div class="upgrade-info">
                         <div class="upgrade-name">Beetle Lab</div>
                         <div class="upgrade-desc">Creates synthetic beetles</div>
-                        <div class="upgrade-cost">Cost: <span id="lab-cost">12000</span></div>
+                        <div class="upgrade-cost">Cost: <span id="lab-cost">10000</span></div>
                         <div class="upgrade-owned">Owned: <span id="lab-owned">0</span></div>
                     </div>
                 </div>
@@ -863,7 +993,7 @@
                     <div class="upgrade-info">
                         <div class="upgrade-name">Beetle Portal</div>
                         <div class="upgrade-desc">Summons interdimensional beetles</div>
-                        <div class="upgrade-cost">Cost: <span id="portal-cost">130000</span></div>
+                        <div class="upgrade-cost">Cost: <span id="portal-cost">100000</span></div>
                         <div class="upgrade-owned">Owned: <span id="portal-owned">0</span></div>
                     </div>
                 </div>
@@ -880,10 +1010,11 @@
             </div>
         </div>
         
-        <div class="achievements-section">
-            <h4>🏆 ACHIEVEMENTS</h4>
-            <div class="achievement-grid" id="achievementGrid">
-                <!-- Achievements will be populated by JavaScript -->
+            <div class="achievements-section">
+                <h4>🏆 ACHIEVEMENTS</h4>
+                <div class="achievement-grid" id="achievementGrid">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
             </div>
         </div>
         
@@ -1034,7 +1165,7 @@
             
             // Random message
             const message = messages[beetleName][Math.floor(Math.random() * messages[beetleName].length)];
-            showMessage(message);
+            showMessage(message, beetle);
             
             // Easter egg: click all beetles 5+ times each
             if (clickCount > 15) {
@@ -1042,14 +1173,32 @@
             }
         }
 
-        function showMessage(text) {
+        function showMessage(text, beetle = null) {
             const msg = document.createElement('div');
             msg.textContent = text;
+            
+            let positionStyle = '';
+            if (beetle) {
+                // Position above the clicked beetle
+                const rect = beetle.getBoundingClientRect();
+                positionStyle = `
+                    position: fixed;
+                    left: ${rect.left + rect.width/2}px;
+                    top: ${rect.top - 20}px;
+                    transform: translateX(-50%);
+                `;
+            } else {
+                // Default center position for other messages
+                positionStyle = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                `;
+            }
+            
             msg.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                ${positionStyle}
                 background: rgba(0,0,0,0.9);
                 color: #ff00ff;
                 padding: 10px 20px;
@@ -1071,28 +1220,106 @@
             }, 2000);
         }
 
+        let partyCountdownInterval = null;
+        let partyTimeRemaining = 0;
+        
         function activatePartyMode() {
-            partyMode = !partyMode;
-            const body = document.body;
+            if (partyMode) return; // Prevent multiple activations
             
-            if (partyMode) {
-                body.classList.add('party-mode');
-                showMessage('🎉 PARTY MODE ACTIVATED! 🎉');
+            partyMode = true;
+            partyTimeRemaining = 30;
+            const body = document.body;
+            const partyCountdown = document.getElementById('partyCountdown');
+            
+            body.classList.add('party-mode');
+            partyCountdown.classList.add('visible');
+            showMessage('🎉 PARTY MODE ACTIVATED! 🎉');
+            
+            // Extra effects
+            const beetles = document.querySelectorAll('.beetle');
+            beetles.forEach(beetle => {
+                beetle.style.animationDuration = '0.5s';
+            });
+            
+            // Start countdown timer
+            updateCountdownDisplay();
+            partyCountdownInterval = setInterval(() => {
+                partyTimeRemaining--;
+                updateCountdownDisplay();
                 
-                // Extra effects
-                const beetles = document.querySelectorAll('.beetle');
-                beetles.forEach(beetle => {
-                    beetle.style.animationDuration = '0.5s';
-                });
-                
-                setTimeout(() => {
-                    body.classList.remove('party-mode');
-                    beetles.forEach(beetle => {
-                        beetle.style.animationDuration = '';
-                    });
-                    partyMode = false;
-                }, 10000);
+                if (partyTimeRemaining <= 0) {
+                    stopPartyMode();
+                }
+            }, 1000);
+        }
+        
+        function updateCountdownDisplay() {
+            const partyCountdown = document.getElementById('partyCountdown');
+            partyCountdown.textContent = `🎉 PARTY: ${partyTimeRemaining}s`;
+            
+            // Change color as time runs out
+            if (partyTimeRemaining <= 5) {
+                partyCountdown.style.background = 'linear-gradient(45deg, #ff0000, #ff6600)';
+            } else if (partyTimeRemaining <= 10) {
+                partyCountdown.style.background = 'linear-gradient(45deg, #ff6600, #ffaa00)';
+            } else {
+                partyCountdown.style.background = 'linear-gradient(45deg, #ff0066, #ff3399)';
             }
+        }
+        
+        function stopPartyMode() {
+            if (!partyMode) return;
+            
+            partyMode = false;
+            const body = document.body;
+            const partyCountdown = document.getElementById('partyCountdown');
+            const beetles = document.querySelectorAll('.beetle');
+            
+            // Clear countdown interval
+            if (partyCountdownInterval) {
+                clearInterval(partyCountdownInterval);
+                partyCountdownInterval = null;
+            }
+            
+            body.classList.remove('party-mode');
+            partyCountdown.classList.remove('visible');
+            beetles.forEach(beetle => {
+                beetle.style.animationDuration = '';
+            });
+            
+            showMessage('🎉 Party mode ended');
+        }
+        
+        // Upgrade icon click handlers
+        function clickUpgradeIcon(type) {
+            const iconElement = document.getElementById(`${type}Icon`);
+            const messages = {
+                'lab': [
+                    '🧪 *bubbling sounds*', 
+                    'Synthesizing beetles...', 
+                    '*lab equipment whirring*', 
+                    'Science in progress!',
+                    'Creating synthetic beetles!'
+                ],
+                'portal': [
+                    '🌀 *interdimensional humming*', 
+                    'Portal stabilized!', 
+                    '*reality bending*', 
+                    'Beetles from another dimension!',
+                    'The void beetles emerge!'
+                ]
+            };
+            
+            // Flash effect
+            iconElement.style.filter = 'brightness(2) saturate(2) drop-shadow(0 0 30px rgba(255,255,255,1))';
+            setTimeout(() => {
+                iconElement.style.filter = '';
+            }, 200);
+            
+            // Random message
+            const messageList = messages[type];
+            const message = messageList[Math.floor(Math.random() * messageList.length)];
+            showMessage(message, iconElement);
         }
 
         // Initialize
@@ -1718,12 +1945,13 @@
             totalClicks: 0,
             totalBeetles: 0,
             upgrades: {
-                cursor: { owned: 0, cost: 15, production: 0.1 },
-                farm: { owned: 0, cost: 100, production: 1 },
-                mine: { owned: 0, cost: 1100, production: 8 },
-                lab: { owned: 0, cost: 12000, production: 47 },
-                portal: { owned: 0, cost: 130000, production: 260 },
-                temple: { owned: 0, cost: 1400000, production: 1400 }
+                cursor: { owned: 0, cost: 15, production: 0.1, maxOwned: 1 },
+                clickpower: { owned: 0, cost: 50, production: 0, maxOwned: null, clickBonus: 1 },
+                farm: { owned: 0, cost: 100, production: 1, maxOwned: null },
+                mine: { owned: 0, cost: 1100, production: 8, maxOwned: null },
+                lab: { owned: 0, cost: 10000, production: 47, maxOwned: null },
+                portal: { owned: 0, cost: 100000, production: 260, maxOwned: null },
+                temple: { owned: 0, cost: 1400000, production: 1400, maxOwned: null }
             },
             achievements: {
                 'first-click': { unlocked: false, name: 'First Click', desc: 'Click your first beetle', icon: '🪳' },
@@ -1793,12 +2021,41 @@
         function buyUpgrade(type) {
             const upgrade = gameState.upgrades[type];
             
+            // Check if upgrade is maxed out
+            if (upgrade.maxOwned && upgrade.owned >= upgrade.maxOwned) {
+                showMessage(`🚫 ${type.toUpperCase()} is already maxed out!`);
+                return;
+            }
+            
             if (gameState.beetles >= upgrade.cost) {
                 gameState.beetles -= upgrade.cost;
                 upgrade.owned++;
                 
-                // Increase cost (Cookie Clicker style)
-                upgrade.cost = Math.ceil(upgrade.cost * 1.15);
+                // Special handling for cursor - activate beetle cursor
+                if (type === 'cursor' && upgrade.owned === 1) {
+                    document.body.classList.add('beetle-cursor');
+                    showMessage('🪳 Beetle cursor activated! Your cursor is now a beetle!');
+                }
+                
+                // Special handling for lab - show lab icon
+                if (type === 'lab' && upgrade.owned === 1) {
+                    document.getElementById('labIcon').classList.add('visible');
+                }
+                
+                // Special handling for portal - show portal icon
+                if (type === 'portal' && upgrade.owned === 1) {
+                    document.getElementById('portalIcon').classList.add('visible');
+                }
+                
+                // Special handling for click power - increase click power
+                if (type === 'clickpower') {
+                    calculateClickPower();
+                }
+                
+                // Increase cost (Cookie Clicker style) only if not maxed
+                if (!upgrade.maxOwned || upgrade.owned < upgrade.maxOwned) {
+                    upgrade.cost = Math.ceil(upgrade.cost * 1.15);
+                }
                 
                 // Calculate new production
                 calculateProduction();
@@ -1806,7 +2063,9 @@
                 checkAchievements();
                 
                 // Visual feedback
-                showMessage(`🏭 ${type.toUpperCase()} purchased! +${upgrade.production}/sec`);
+                if (type !== 'cursor' || upgrade.owned === 1) {
+                    showMessage(`🏭 ${type.toUpperCase()} purchased! +${upgrade.production}/sec`);
+                }
             } else {
                 showMessage(`💸 Not enough beetles! Need ${upgrade.cost - gameState.beetles} more`);
             }
@@ -1816,8 +2075,19 @@
             gameState.beetlesPerSecond = 0;
             
             Object.entries(gameState.upgrades).forEach(([type, upgrade]) => {
-                gameState.beetlesPerSecond += upgrade.owned * upgrade.production;
+                if (upgrade.production) {
+                    gameState.beetlesPerSecond += upgrade.owned * upgrade.production;
+                }
             });
+        }
+        
+        function calculateClickPower() {
+            gameState.clickPower = 1; // Base click power
+            
+            // Add click power from upgrades
+            if (gameState.upgrades.clickpower) {
+                gameState.clickPower += gameState.upgrades.clickpower.owned * gameState.upgrades.clickpower.clickBonus;
+            }
         }
         
         function updateDisplay() {
@@ -1830,12 +2100,20 @@
                 document.getElementById(`${type}-cost`).textContent = formatNumber(upgrade.cost);
                 document.getElementById(`${type}-owned`).textContent = upgrade.owned;
                 
-                // Highlight affordable upgrades
+                // Highlight affordable upgrades or mark as maxed
                 const upgradeElement = document.getElementById(`upgrade-${type}`);
-                if (gameState.beetles >= upgrade.cost) {
-                    upgradeElement.classList.add('affordable');
-                } else {
+                
+                if (upgrade.maxOwned && upgrade.owned >= upgrade.maxOwned) {
+                    upgradeElement.classList.add('maxed');
                     upgradeElement.classList.remove('affordable');
+                    document.getElementById(`${type}-cost`).textContent = 'MAXED';
+                } else {
+                    upgradeElement.classList.remove('maxed');
+                    if (gameState.beetles >= upgrade.cost) {
+                        upgradeElement.classList.add('affordable');
+                    } else {
+                        upgradeElement.classList.remove('affordable');
+                    }
                 }
             });
         }
@@ -1934,8 +2212,22 @@
                 const savedState = JSON.parse(saved);
                 gameState = { ...gameState, ...savedState };
                 calculateProduction();
+                calculateClickPower();
                 updateDisplay();
                 renderAchievements();
+                
+                // Restore beetle cursor if owned
+                if (gameState.upgrades.cursor.owned > 0) {
+                    document.body.classList.add('beetle-cursor');
+                }
+                
+                // Restore upgrade icons if owned
+                if (gameState.upgrades.lab.owned > 0) {
+                    document.getElementById('labIcon').classList.add('visible');
+                }
+                if (gameState.upgrades.portal.owned > 0) {
+                    document.getElementById('portalIcon').classList.add('visible');
+                }
             }
         }
         
@@ -1943,6 +2235,7 @@
         function initBeetleClicker() {
             loadGame();
             renderAchievements();
+            calculateClickPower();
             updateDisplay();
             
             // Start game loop
