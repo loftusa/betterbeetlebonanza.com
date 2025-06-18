@@ -414,6 +414,234 @@
             100% { background-color: #ff0088; }
         }
 
+        /* Beetle Clicker Styles */
+        .beetle-clicker-panel {
+            position: fixed;
+            right: -350px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            height: 80vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(50,0,50,0.95));
+            border: 3px solid #FFD700;
+            border-radius: 15px 0 0 15px;
+            padding: 20px;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+            transition: right 0.5s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            font-family: 'Comic Sans MS', cursive;
+        }
+        
+        .beetle-clicker-panel.open {
+            right: 0;
+        }
+        
+        .clicker-toggle {
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: black;
+            padding: 10px 20px;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+            transition: all 0.3s;
+        }
+        
+        .clicker-toggle:hover {
+            background: linear-gradient(45deg, #FFA500, #FF8C00);
+            transform: translateY(-50%) rotate(-90deg) scale(1.1);
+        }
+        
+        .clicker-header h3 {
+            color: #FFD700;
+            text-align: center;
+            margin: 0 0 15px 0;
+            text-shadow: 2px 2px 0px black;
+        }
+        
+        .beetle-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #FFD700;
+        }
+        
+        .stat-label {
+            color: #FFD700;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .stat-value {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .main-beetle-clicker {
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            background: radial-gradient(circle, rgba(255,215,0,0.3), transparent);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px dashed #FFD700;
+            transition: all 0.2s;
+        }
+        
+        .main-beetle-clicker:hover {
+            background: radial-gradient(circle, rgba(255,215,0,0.5), transparent);
+            transform: scale(1.05);
+        }
+        
+        .main-beetle-clicker:active {
+            transform: scale(0.95);
+        }
+        
+        .giant-beetle {
+            font-size: 4rem;
+            animation: beetle-idle 2s ease-in-out infinite;
+        }
+        
+        @keyframes beetle-idle {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+        
+        .click-text {
+            color: #FFD700;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 2px 2px 0px black;
+        }
+        
+        .upgrades-section h4, .achievements-section h4 {
+            color: #FFD700;
+            margin: 20px 0 10px 0;
+            text-shadow: 2px 2px 0px black;
+        }
+        
+        .upgrade-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .upgrade {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #666;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upgrade:hover {
+            border-color: #FFD700;
+            background: rgba(255,215,0,0.1);
+        }
+        
+        .upgrade.affordable {
+            border-color: #00FF00;
+            background: rgba(0,255,0,0.1);
+        }
+        
+        .upgrade.affordable:hover {
+            background: rgba(0,255,0,0.2);
+        }
+        
+        .upgrade-icon {
+            font-size: 2rem;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .upgrade-info {
+            flex: 1;
+        }
+        
+        .upgrade-name {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .upgrade-desc {
+            color: #CCC;
+            font-size: 0.8rem;
+            margin: 2px 0;
+        }
+        
+        .upgrade-cost {
+            color: #FF6B6B;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .upgrade-owned {
+            color: #4ECDC4;
+            font-size: 0.8rem;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .achievement {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #666;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+        }
+        
+        .achievement.unlocked {
+            border-color: #FFD700;
+            background: rgba(255,215,0,0.2);
+            color: #FFD700;
+        }
+        
+        .achievement-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        
+        .beetle-click-effect {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2rem;
+            color: #FFD700;
+            font-weight: bold;
+            text-shadow: 2px 2px 0px black;
+            animation: click-float 1s ease-out forwards;
+            z-index: 1001;
+        }
+        
+        @keyframes click-float {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+
         @media (max-width: 768px) {
             .title { font-size: 3rem; }
             .beetle { font-size: 5rem; }
@@ -424,6 +652,10 @@
                 gap: 15px; 
                 padding: 15px 20px; 
             }
+            .beetle-clicker-panel {
+                width: 300px;
+                right: -300px;
+            }
         }
     </style>
 </head>
@@ -431,13 +663,14 @@
     <div class="retro-text">
         BEETLE.EXE v2.0.3<br>
         STATUS: VIBING<br>
-        BUGS: FEATURE
+        BUGS: FEATURE<br>
+        <span style="opacity: 0.3; font-size: 0.6rem;">ORDO AB CHAO</span>
     </div>
 
     <div class="floating-beetles" id="floatingBeetles"></div>
     
     <h1 class="title">🪳 BETTER BEETLE BONANZA 🪳</h1>
-    <div class="subtitle">~est. 2003~ ★ BEETLE RAVE SUPREME ★</div>
+    <div class="subtitle">~est. 2003~ ★ BEETLE RAVE SUPREME ★ <span style="opacity: 0.2; font-size: 0.8rem;">∴∵∴</span></div>
     
     <div class="music-bar">
         <button class="play-button" onclick="toggleMusic()">▶ PLAY</button>
@@ -470,6 +703,110 @@
     </div>
 
     <div class="easter-egg" onclick="activatePartyMode()" title="Secret party mode!">🎉</div>
+    
+    <!-- Beetle Clicker Game Panel -->
+    <div class="beetle-clicker-panel" id="beetleClicker">
+        <div class="clicker-header">
+            <h3>🪳 BEETLE EMPIRE 🪳</h3>
+            <div class="beetle-stats">
+                <div class="stat">
+                    <span class="stat-label">Beetles:</span>
+                    <span class="stat-value" id="beetleCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Per Second:</span>
+                    <span class="stat-value" id="beetlePerSec">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-beetle-clicker" onclick="clickBeetle()">
+            <div class="giant-beetle">🪳</div>
+            <div class="click-text">CLICK FOR BEETLES!</div>
+        </div>
+        
+        <div class="upgrades-section">
+            <h4>🏭 BEETLE PRODUCTION</h4>
+            <div class="upgrade-grid">
+                <div class="upgrade" id="upgrade-cursor" onclick="buyUpgrade('cursor')">
+                    <div class="upgrade-icon">👆</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Cursor</div>
+                        <div class="upgrade-desc">Auto-clicks beetles</div>
+                        <div class="upgrade-cost">Cost: <span id="cursor-cost">15</span></div>
+                        <div class="upgrade-owned">Owned: <span id="cursor-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-farm" onclick="buyUpgrade('farm')">
+                    <div class="upgrade-icon">🌱</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Farm</div>
+                        <div class="upgrade-desc">Grows beetles naturally</div>
+                        <div class="upgrade-cost">Cost: <span id="farm-cost">100</span></div>
+                        <div class="upgrade-owned">Owned: <span id="farm-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-mine" onclick="buyUpgrade('mine')">
+                    <div class="upgrade-icon">⛏️</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Mine</div>
+                        <div class="upgrade-desc">Digs up rare beetles</div>
+                        <div class="upgrade-cost">Cost: <span id="mine-cost">1100</span></div>
+                        <div class="upgrade-owned">Owned: <span id="mine-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-lab" onclick="buyUpgrade('lab')">
+                    <div class="upgrade-icon">🧪</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Lab</div>
+                        <div class="upgrade-desc">Creates synthetic beetles</div>
+                        <div class="upgrade-cost">Cost: <span id="lab-cost">12000</span></div>
+                        <div class="upgrade-owned">Owned: <span id="lab-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-portal" onclick="buyUpgrade('portal')">
+                    <div class="upgrade-icon">🌀</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Portal</div>
+                        <div class="upgrade-desc">Summons interdimensional beetles</div>
+                        <div class="upgrade-cost">Cost: <span id="portal-cost">130000</span></div>
+                        <div class="upgrade-owned">Owned: <span id="portal-owned">0</span></div>
+                    </div>
+                </div>
+                
+                <div class="upgrade" id="upgrade-temple" onclick="buyUpgrade('temple')">
+                    <div class="upgrade-icon">🏛️</div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Beetle Temple</div>
+                        <div class="upgrade-desc">Worships the Beetle Gods</div>
+                        <div class="upgrade-cost">Cost: <span id="temple-cost">1400000</span></div>
+                        <div class="upgrade-owned">Owned: <span id="temple-owned">0</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="achievements-section">
+            <h4>🏆 ACHIEVEMENTS</h4>
+            <div class="achievement-grid" id="achievementGrid">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="clicker-toggle" onclick="toggleClicker()">
+            <span id="toggleText">📱 OPEN BEETLE EMPIRE</span>
+        </div>
+    </div>
+    
+    <!-- Hidden mysteries scattered throughout -->
+    <div style="position: fixed; top: 33%; right: 3px; opacity: 0.05; font-size: 8px; writing-mode: vertical-rl; color: white;">SOLVE ET COAGULA</div>
+    <div style="position: fixed; bottom: 33%; left: 3px; opacity: 0.05; font-size: 8px; writing-mode: vertical-lr; color: white;">AS ABOVE SO BELOW</div>
+    <div style="position: fixed; top: 77px; left: 77px; opacity: 0.03; font-size: 6px; color: white;">⊹ ࿇ ⊹</div>
+    <div style="position: fixed; bottom: 144px; right: 144px; opacity: 0.03; font-size: 6px; color: white;">∞ ϧ ∞</div>
 
     <script>
         let isPlaying = false;
@@ -1053,9 +1390,490 @@
             }
         });
         
+        // Sacred geometry and numerology secrets
+        let sacredSequence = [];
+        const illuminatiCode = [73, 76, 76, 85, 77, 73, 78, 65, 84, 73]; // "ILLUMINATI"
+        const masonicNumbers = [3, 7, 13, 23, 33, 47, 77, 93, 144, 777];
+        let angelicMode = false;
+        let hiddenSymbolsRevealed = 0;
+        
+        // Secret society mysteries
+        function checkSacredNumbers() {
+            const currentTime = new Date();
+            const minutes = currentTime.getMinutes();
+            const seconds = currentTime.getSeconds();
+            
+            // Check for sacred times
+            if ((minutes === 33 && seconds === 33) || 
+                (minutes === 23 && seconds === 23) ||
+                (minutes === 11 && seconds === 11)) {
+                revealHiddenTruth();
+            }
+            
+            // Fibonacci mysteries
+            if ([1, 1, 2, 3, 5, 8, 13, 21, 34, 55].includes(seconds)) {
+                if (Math.random() < 0.1) {
+                    showMessage('⌬ The sacred spiral reveals itself ⌬');
+                    createGoldenRatioEffect();
+                }
+            }
+        }
+        
+        function revealHiddenTruth() {
+            const mysteries = [
+                '∴ The beetles know the ancient paths ∴',
+                '◊ Three pillars, three beetles, three degrees ◊',
+                '⊹ As the scarab guides the sun, so do they guide the code ⊹',
+                '𖤍 In the order of chaos, truth emerges 𖤍',
+                '✦ The geometry of six legs reveals sacred truths ✦'
+            ];
+            
+            const randomMystery = mysteries[Math.floor(Math.random() * mysteries.length)];
+            showMessage(randomMystery);
+            
+            // Reveal hidden symbols temporarily
+            revealHiddenSymbols();
+        }
+        
+        function createGoldenRatioEffect() {
+            const phi = 1.618033988749;
+            for (let i = 0; i < 8; i++) {
+                const spiral = document.createElement('div');
+                spiral.textContent = '◉';
+                spiral.style.cssText = `
+                    position: fixed;
+                    left: ${50 + (30 * Math.cos(i * phi) / phi)}%;
+                    top: ${50 + (30 * Math.sin(i * phi) / phi)}%;
+                    font-size: 1rem;
+                    color: gold;
+                    opacity: 0.7;
+                    animation: golden-fade 3s ease-out forwards;
+                    pointer-events: none;
+                    z-index: 999;
+                `;
+                document.body.appendChild(spiral);
+                
+                setTimeout(() => {
+                    if (spiral && spiral.parentNode) {
+                        spiral.parentNode.removeChild(spiral);
+                    }
+                }, 3000);
+            }
+        }
+        
+        function revealHiddenSymbols() {
+            const hiddenElements = document.querySelectorAll('[style*="opacity: 0.0"]');
+            hiddenElements.forEach(el => {
+                el.style.opacity = '0.8';
+                el.style.color = '#FFD700';
+                el.style.textShadow = '0 0 10px #FFD700';
+            });
+            
+            setTimeout(() => {
+                hiddenElements.forEach(el => {
+                    el.style.opacity = '0.05';
+                    el.style.color = 'white';
+                    el.style.textShadow = '';
+                });
+            }, 7000);
+        }
+        
+        // Angelic language decoder
+        function activateAngelicMode() {
+            if (angelicMode) return;
+            angelicMode = true;
+            
+            showMessage('𝔄𝔫𝔤𝔢𝔩𝔦𝔠 𝔦𝔫𝔱𝔢𝔯𝔣𝔞𝔠𝔢 𝔞𝔠𝔱𝔦𝔳𝔞𝔱𝔢𝔡');
+            
+            // Replace beetle names with Enochian-inspired text
+            setTimeout(() => {
+                document.querySelector('.grangus .beetle-name').textContent = 'ᚷᚱᚨᚾᚷᚢᛊ ᚷᚱᚢᛗᛒᚤ';
+                document.querySelector('.deet .beetle-name').textContent = 'ᛞᛖᛖᛏ ᚷᛚᛟᚱᛁᛟᚢᛊ';
+                document.querySelector('.prosciutto .beetle-name').textContent = 'ᛈᚱᛟᛊᚲᛁᚢᛏᛏᛟ';
+            }, 1000);
+            
+            setTimeout(() => {
+                document.querySelector('.grangus .beetle-name').textContent = 'GRANGUS GRUMBY';
+                document.querySelector('.deet .beetle-name').textContent = 'DEET GLORIOUS';
+                document.querySelector('.prosciutto .beetle-name').textContent = 'PROSCIUTTO';
+                angelicMode = false;
+            }, 10000);
+        }
+        
+        // Secret keycode sequences
+        function checkIlluminatiCode() {
+            if (sacredSequence.length >= illuminatiCode.length) {
+                const lastSequence = sacredSequence.slice(-illuminatiCode.length);
+                if (JSON.stringify(lastSequence) === JSON.stringify(illuminatiCode)) {
+                    showMessage('△ The All-Seeing Beetle acknowledges you △');
+                    activateIlluminatiMode();
+                    sacredSequence = [];
+                }
+            }
+        }
+        
+        function activateIlluminatiMode() {
+            // Add eye of providence effect
+            const eye = document.createElement('div');
+            eye.innerHTML = '👁';
+            eye.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 10rem;
+                opacity: 0;
+                animation: all-seeing-eye 8s ease-in-out;
+                pointer-events: none;
+                z-index: 9999;
+                text-shadow: 0 0 50px #FFD700;
+            `;
+            document.body.appendChild(eye);
+            
+            // Pyramid formation with beetles
+            document.querySelectorAll('.beetle').forEach((beetle, i) => {
+                beetle.style.transform = `translateY(-${i * 50}px) scale(${1 + i * 0.3})`;
+            });
+            
+            setTimeout(() => {
+                if (eye && eye.parentNode) {
+                    eye.parentNode.removeChild(eye);
+                }
+                document.querySelectorAll('.beetle').forEach(beetle => {
+                    beetle.style.transform = '';
+                });
+            }, 8000);
+        }
+        
+        // Check sacred numbers periodically
+        setInterval(checkSacredNumbers, 1000);
+        
+        // Enhanced keyboard listener for sacred sequences
+        document.addEventListener('keydown', (e) => {
+            sacredSequence.push(e.keyCode);
+            if (sacredSequence.length > 15) {
+                sacredSequence.shift();
+            }
+            
+            checkIlluminatiCode();
+            
+            // Secret masonic shortcuts
+            if (e.key === 'ψ' || (e.altKey && e.key === 'p')) { // Alt+P for psi
+                e.preventDefault();
+                activateAngelicMode();
+            }
+            
+            if (e.key === '∆' || (e.altKey && e.shiftKey && e.key === 'j')) { // Alt+Shift+J
+                e.preventDefault();
+                showMessage('△ The sacred triangle has been invoked △');
+                createTriangleFormation();
+            }
+            
+            // Secret number combinations
+            if (e.key === '3' && e.shiftKey && e.ctrlKey) {
+                hiddenSymbolsRevealed++;
+                if (hiddenSymbolsRevealed === 3) {
+                    showMessage('⊹ Third degree achieved ⊹');
+                    revealHiddenTruth();
+                }
+            }
+        });
+        
+        function createTriangleFormation() {
+            const vertices = [
+                {x: 50, y: 20}, // Top
+                {x: 20, y: 80}, // Bottom left  
+                {x: 80, y: 80}  // Bottom right
+            ];
+            
+            document.querySelectorAll('.beetle').forEach((beetle, i) => {
+                if (vertices[i]) {
+                    beetle.style.position = 'fixed';
+                    beetle.style.left = vertices[i].x + '%';
+                    beetle.style.top = vertices[i].y + '%';
+                    beetle.style.transform = 'translate(-50%, -50%)';
+                }
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.beetle').forEach(beetle => {
+                    beetle.style.position = '';
+                    beetle.style.left = '';
+                    beetle.style.top = '';
+                    beetle.style.transform = '';
+                });
+            }, 5000);
+        }
+        
+        // Hidden timestamp mysteries
+        function addTimestampMysteries() {
+            const now = new Date();
+            const timestamp = now.getTime();
+            
+            // Check for palindromic timestamps
+            const timeStr = timestamp.toString();
+            if (timeStr === timeStr.split('').reverse().join('')) {
+                showMessage('⟡ Time itself reveals the palindrome ⟡');
+            }
+            
+            // Add hidden timestamp in HTML comment
+            document.body.appendChild(document.createComment(`Sacred timestamp: ${timestamp} | Beetle coordinates: φ=${(1+Math.sqrt(5))/2} | ∴∵∴`));
+        }
+        
+        // Beetle Clicker Game Variables
+        let gameState = {
+            beetles: 0,
+            clickPower: 1,
+            beetlesPerSecond: 0,
+            totalClicks: 0,
+            totalBeetles: 0,
+            upgrades: {
+                cursor: { owned: 0, cost: 15, production: 0.1 },
+                farm: { owned: 0, cost: 100, production: 1 },
+                mine: { owned: 0, cost: 1100, production: 8 },
+                lab: { owned: 0, cost: 12000, production: 47 },
+                portal: { owned: 0, cost: 130000, production: 260 },
+                temple: { owned: 0, cost: 1400000, production: 1400 }
+            },
+            achievements: {
+                'first-click': { unlocked: false, name: 'First Click', desc: 'Click your first beetle', icon: '🪳' },
+                'hundred-beetles': { unlocked: false, name: 'Beetle Army', desc: 'Own 100 beetles', icon: '💯' },
+                'thousand-beetles': { unlocked: false, name: 'Beetle Legion', desc: 'Own 1,000 beetles', icon: '⭐' },
+                'first-upgrade': { unlocked: false, name: 'Automation', desc: 'Buy your first upgrade', icon: '🤖' },
+                'click-master': { unlocked: false, name: 'Click Master', desc: 'Click 1,000 times', icon: '👆' },
+                'beetle-lord': { unlocked: false, name: 'Beetle Lord', desc: 'Own 10,000 beetles', icon: '👑' },
+                'speed-demon': { unlocked: false, name: 'Speed Demon', desc: 'Produce 100 beetles/sec', icon: '⚡' },
+                'millionaire': { unlocked: false, name: 'Beetle Millionaire', desc: 'Own 1,000,000 beetles', icon: '💰' },
+                'temple-builder': { unlocked: false, name: 'Temple Builder', desc: 'Build a Beetle Temple', icon: '🏛️' }
+            },
+            clickerOpen: false
+        };
+        
+        // Beetle Clicker Functions
+        function toggleClicker() {
+            const panel = document.getElementById('beetleClicker');
+            const toggle = document.getElementById('toggleText');
+            
+            gameState.clickerOpen = !gameState.clickerOpen;
+            
+            if (gameState.clickerOpen) {
+                panel.classList.add('open');
+                toggle.textContent = '❌ CLOSE EMPIRE';
+            } else {
+                panel.classList.remove('open');
+                toggle.textContent = '📱 OPEN BEETLE EMPIRE';
+            }
+        }
+        
+        function clickBeetle() {
+            gameState.beetles += gameState.clickPower;
+            gameState.totalClicks++;
+            gameState.totalBeetles += gameState.clickPower;
+            
+            // Create click effect
+            createClickEffect();
+            
+            // Update display
+            updateDisplay();
+            
+            // Check achievements
+            checkAchievements();
+        }
+        
+        function createClickEffect() {
+            const clickEffect = document.createElement('div');
+            clickEffect.className = 'beetle-click-effect';
+            clickEffect.textContent = `+${gameState.clickPower}`;
+            
+            // Position randomly around the clicker
+            const clicker = document.querySelector('.main-beetle-clicker');
+            const rect = clicker.getBoundingClientRect();
+            clickEffect.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            clickEffect.style.top = (rect.top + Math.random() * rect.height) + 'px';
+            
+            document.body.appendChild(clickEffect);
+            
+            setTimeout(() => {
+                if (clickEffect && clickEffect.parentNode) {
+                    clickEffect.parentNode.removeChild(clickEffect);
+                }
+            }, 1000);
+        }
+        
+        function buyUpgrade(type) {
+            const upgrade = gameState.upgrades[type];
+            
+            if (gameState.beetles >= upgrade.cost) {
+                gameState.beetles -= upgrade.cost;
+                upgrade.owned++;
+                
+                // Increase cost (Cookie Clicker style)
+                upgrade.cost = Math.ceil(upgrade.cost * 1.15);
+                
+                // Calculate new production
+                calculateProduction();
+                updateDisplay();
+                checkAchievements();
+                
+                // Visual feedback
+                showMessage(`🏭 ${type.toUpperCase()} purchased! +${upgrade.production}/sec`);
+            } else {
+                showMessage(`💸 Not enough beetles! Need ${upgrade.cost - gameState.beetles} more`);
+            }
+        }
+        
+        function calculateProduction() {
+            gameState.beetlesPerSecond = 0;
+            
+            Object.entries(gameState.upgrades).forEach(([type, upgrade]) => {
+                gameState.beetlesPerSecond += upgrade.owned * upgrade.production;
+            });
+        }
+        
+        function updateDisplay() {
+            // Update main stats
+            document.getElementById('beetleCount').textContent = formatNumber(Math.floor(gameState.beetles));
+            document.getElementById('beetlePerSec').textContent = formatNumber(gameState.beetlesPerSecond);
+            
+            // Update upgrade displays
+            Object.entries(gameState.upgrades).forEach(([type, upgrade]) => {
+                document.getElementById(`${type}-cost`).textContent = formatNumber(upgrade.cost);
+                document.getElementById(`${type}-owned`).textContent = upgrade.owned;
+                
+                // Highlight affordable upgrades
+                const upgradeElement = document.getElementById(`upgrade-${type}`);
+                if (gameState.beetles >= upgrade.cost) {
+                    upgradeElement.classList.add('affordable');
+                } else {
+                    upgradeElement.classList.remove('affordable');
+                }
+            });
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+            return num.toFixed(0);
+        }
+        
+        function checkAchievements() {
+            const achievements = gameState.achievements;
+            
+            // Check various achievement conditions
+            if (!achievements['first-click'].unlocked && gameState.totalClicks >= 1) {
+                unlockAchievement('first-click');
+            }
+            
+            if (!achievements['hundred-beetles'].unlocked && gameState.totalBeetles >= 100) {
+                unlockAchievement('hundred-beetles');
+            }
+            
+            if (!achievements['thousand-beetles'].unlocked && gameState.totalBeetles >= 1000) {
+                unlockAchievement('thousand-beetles');
+            }
+            
+            if (!achievements['first-upgrade'].unlocked) {
+                const hasUpgrade = Object.values(gameState.upgrades).some(upgrade => upgrade.owned > 0);
+                if (hasUpgrade) unlockAchievement('first-upgrade');
+            }
+            
+            if (!achievements['click-master'].unlocked && gameState.totalClicks >= 1000) {
+                unlockAchievement('click-master');
+            }
+            
+            if (!achievements['beetle-lord'].unlocked && gameState.totalBeetles >= 10000) {
+                unlockAchievement('beetle-lord');
+            }
+            
+            if (!achievements['speed-demon'].unlocked && gameState.beetlesPerSecond >= 100) {
+                unlockAchievement('speed-demon');
+            }
+            
+            if (!achievements['millionaire'].unlocked && gameState.totalBeetles >= 1000000) {
+                unlockAchievement('millionaire');
+            }
+            
+            if (!achievements['temple-builder'].unlocked && gameState.upgrades.temple.owned > 0) {
+                unlockAchievement('temple-builder');
+            }
+        }
+        
+        function unlockAchievement(id) {
+            gameState.achievements[id].unlocked = true;
+            const achievement = gameState.achievements[id];
+            showMessage(`🏆 ACHIEVEMENT UNLOCKED: ${achievement.name}!`);
+            renderAchievements();
+        }
+        
+        function renderAchievements() {
+            const grid = document.getElementById('achievementGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(gameState.achievements).forEach(([id, achievement]) => {
+                const achievementDiv = document.createElement('div');
+                achievementDiv.className = `achievement ${achievement.unlocked ? 'unlocked' : ''}`;
+                achievementDiv.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div>${achievement.name}</div>
+                `;
+                achievementDiv.title = achievement.desc;
+                grid.appendChild(achievementDiv);
+            });
+        }
+        
+        // Game loop for idle production
+        function gameLoop() {
+            if (gameState.beetlesPerSecond > 0) {
+                gameState.beetles += gameState.beetlesPerSecond / 10; // 10 FPS
+                gameState.totalBeetles += gameState.beetlesPerSecond / 10;
+                updateDisplay();
+                checkAchievements();
+            }
+        }
+        
+        // Save/Load game state
+        function saveGame() {
+            localStorage.setItem('beetleEmpireState', JSON.stringify(gameState));
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('beetleEmpireState');
+            if (saved) {
+                const savedState = JSON.parse(saved);
+                gameState = { ...gameState, ...savedState };
+                calculateProduction();
+                updateDisplay();
+                renderAchievements();
+            }
+        }
+        
+        // Initialize game
+        function initBeetleClicker() {
+            loadGame();
+            renderAchievements();
+            updateDisplay();
+            
+            // Start game loop
+            setInterval(gameLoop, 100); // 10 FPS
+            
+            // Auto-save every 30 seconds
+            setInterval(saveGame, 30000);
+        }
+        
         // Initialize all secrets
         window.addEventListener('load', () => {
             initTextSecrets();
+            addTimestampMysteries();
+            initBeetleClicker();
+            
+            // Hidden initialization sequence
+            console.log('🪳 %cBEETLE MYSTERIES INITIALIZED', 'color: #FFD700; font-size: 12px;');
+            console.log('∴ Sacred numbers: 3, 7, 13, 23, 33, 47, 77, 93, 144, 777');
+            console.log('⊹ Type "ILLUMINATI" letter by letter to reveal the truth');
+            console.log('△ Alt+P for angelic interface, Alt+Shift+J for sacred geometry');
+            console.log('◊ Watch for 11:11, 23:23, 33:33 on the clock...');
             
             // Add new CSS animations
             const secretStyles = document.createElement('style');
@@ -1117,6 +1935,19 @@
                 @keyframes rainbow-spin {
                     0% { filter: hue-rotate(0deg) saturate(200%) brightness(150%); }
                     100% { filter: hue-rotate(360deg) saturate(200%) brightness(150%); }
+                }
+                
+                @keyframes golden-fade {
+                    0% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+                    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+                    100% { opacity: 0; transform: scale(0.8) rotate(360deg); }
+                }
+                
+                @keyframes all-seeing-eye {
+                    0% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
+                    20% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+                    80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+                    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5) rotate(360deg); }
                 }
             `;
             document.head.appendChild(secretStyles);
